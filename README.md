@@ -13,7 +13,10 @@ I recently had pretty bad experience with explaining configuration, organisation
   - [x] read all documents in the collection
   - [ ] get document by id
 - Auth hooks
-  - Login user
+  - [ ] Login user
+  - [ ] Add current user lookup function
+  - [ ] Sign up user
+  - [ ] Hooks for all signup methods
 - Realtime DB hooks
 - Storage hooks
 
@@ -55,3 +58,9 @@ const [error, loading, data] = useDocumentQuery({
 
 - Add doc to collection
 - Set doc in the collection (similar to add, but overwrites if already exists)
+
+### Credits
+
+- [Using firebase with react hooks](https://benmcmahen.com/using-firebase-with-react-hooks/)
+- [Building custom React Hooks to fetch data from Firebase Firestore](https://www.williamkurniawan.com/blog/building-custom-react-hooks-to-fetch-data-from-firebase-firestore)
+- [useAuth hook](https://usehooks.com/useAuth/)
