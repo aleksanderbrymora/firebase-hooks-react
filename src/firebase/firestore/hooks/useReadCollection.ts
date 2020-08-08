@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
-import firestore from './init';
-import { Data } from './types';
+import firestore from '../init';
+import { Data } from '../types';
 
 export const useReadCollection = (path: string): Data => {
 	const [data, setData] = useState<Data>([null, true, []]);
