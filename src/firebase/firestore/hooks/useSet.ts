@@ -1,7 +1,7 @@
 // TODO this is just a copy to get rid of the errors
 import { useState, useEffect } from 'react';
 import firestore from '../init';
-import { Data } from '../types';
+import { Data } from '../../types/firestore-data';
 
 export const useAdd = (query: string, payload: any): Data => {
 	const [data, setData] = useState<Data>([null, true, []]);

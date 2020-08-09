@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { userType } from './user-type';
+import { userType } from '../types/user-type';
 import * as authActions from './authActions/index';
 
 const useProvideAuth = () => {
