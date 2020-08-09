@@ -7,17 +7,17 @@ export const useAdd = (query: string, payload: any): Data => {
 
 	useEffect(() => {
 		const unsubscribe = firestore.collection(query).onSnapshot(
-			(snapshot) => {
+			(snapshot: { docs: any[]; }) => {
 				setData([
 					null,
 					false,
-					snapshot.docs.map((doc) => ({
+					snapshot.docs.map((doc: { id: string; data: () => object; }) => ({
 						id: doc.id,
 						...doc.data(),
 					})),
 				]);
 			},
-			(error) => setData([error, false, []]),
+			(error: Error | null) => setData([error, false, []]),
 		);
 		return unsubscribe;
 	}, []);
