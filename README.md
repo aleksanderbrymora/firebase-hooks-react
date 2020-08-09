@@ -7,8 +7,51 @@ While Firebase is a great way to abstract backend interaction for all devs, I be
 Another reason why I'm writing this project is to make firebase as accessible to new users as I can.
 I recently had pretty bad experience with explaining configuration, organisation and usage to few new Web Devs and I believe there is too much that is not explained in the docs explicitly, so I might as well attempt to abstract it with custom hooks.
 
-## TODO
+## Usage
 
+```js
+// Add these to index.js
+import {FirebaseContextCreate} from 'firebase-hooks' // todo come up with name
+import * as React from 'react';
+import * as ReactDOM from 'react-dom';
+import App from './App'
+
+const Firebase = FirebaseContextCreate({
+  apiKey: "api-key",
+  authDomain: "project-id.firebaseapp.com",
+  databaseURL: "https://project-id.firebaseio.com",
+  projectId: "project-id",
+  storageBucket: "project-id.appspot.com",
+  messagingSenderId: "sender-id",
+  appId: "app-id",
+  measurementId: "G-measurement-id",
+}, ['firestore', 'auth', 'database', 'storage']) //add only what you need to this array
+
+ReactDOM.render(
+	<React.StrictMode>
+		<Firebase>
+			<App />
+		</Firebase>
+	</React.StrictMode>,
+	document.getElementById('root'),
+);
+
+// Then in any child component import hooks that you need
+import { useReadCollection } from 'firebase-hooks/firestore';
+const App = () => {
+	const [error, loading, data] = useReadCollection('posts');
+	return (
+		<div className='App'>
+			{error && JSON.stringify(error)}
+			{loading ? <p>Loading...</p> : <p>{JSON.stringify(data)}</p>}
+		</div>
+	);
+}
+```
+
+## TODO
+- Main
+  - [ ] add provider element for hooks to utilise. The idea is to create a custom provider that has access to firebase functions wrapped with hooks, so the user has to only wrap his `<App/>` with provider, then hooks will be configured to consume that context.
 - Firestore hooks
   - [x] read all documents in the collection
   - [ ] get document by id
