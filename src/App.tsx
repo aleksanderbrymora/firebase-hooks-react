@@ -1,7 +1,7 @@
-import React, { FC } from 'react';
+import * as React from 'react';
 import { useReadCollection } from './firebase/firestore';
 
-const App: FC = () => {
+const App: React.FC = () => {
 	const [error, loading, data] = useReadCollection('posts');
 	return (
 		<div className='App'>
