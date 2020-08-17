@@ -1,9 +1,9 @@
-import { useState, useEffect, useContext } from 'react';
+import { useState, useEffect } from 'react';
 import { CollectionData } from '../types';
 import { useFire } from '../context';
 import handleNoImport from './handleError';
 
-export const useReadCollection = (path: string): CollectionData => {
+export const useReadDoc = (path: string): CollectionData => {
 	const [data, setData] = useState<CollectionData>([null, true, []]);
 	const { firestore } = useFire();
 
@@ -11,11 +11,11 @@ export const useReadCollection = (path: string): CollectionData => {
 		// this probably needs to be rethought as im probably not handling the error enough
 		handleNoImport(firestore);
 		const unsubscribe = firestore!.collection(path).onSnapshot(
-			(snapshot: firebase.firestore.QuerySnapshot) => {
+			(snapshot) => {
 				setData([
 					null,
 					false,
-					snapshot.docs.map((doc: firebase.firestore.DocumentData) => ({
+					snapshot.docs.map((doc) => ({
 						id: doc.id,
 						...doc.data(),
 					})),

@@ -55,6 +55,9 @@ const App = () => {
 ## TODO
 
 - Main
+  - [ ] cache (maybe?)
+    - [ ] add caching for the responses from databases
+    - [ ] add a flag thats saying data is stale and its currently loading
   - [ ] add provider element for hooks to utilise. The idea is to create a custom provider that has access to firebase functions wrapped with hooks, so the user has to only wrap his `<App/>` with provider, then hooks will be configured to consume that context.
 - Firestore hooks
   - [x] read all documents in the collection
@@ -87,10 +90,12 @@ _Note_ this variable is subject to change and will be defined in one place
 
 ```js
 // simple query
+// todo add `fromCache`
 const [error, loading, data] = useDocumentQuery('name', '==', 'Denver');
 
 // query with configuration
 const [error, loading, data] = useDocumentQuery({
+	collection: 'cities',
 	query: [
 		['state', '==', 'CO'],
 		['name', '==', 'Denver'],
