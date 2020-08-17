@@ -17,7 +17,7 @@ export const useReadOne = (path: string): Data => {
 					})),
 				]);
 			},
-			(error) => setData([error, false, []]),
+			(error: firebase.FirebaseError) => setData([error, false, []]),
 		);
 		return unsubscribe;
 	}, [path]);

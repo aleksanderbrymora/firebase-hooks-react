@@ -7,17 +7,17 @@ export const useReadCollection = (path: string): Data => {
 
 	useEffect(() => {
 		const unsubscribe = firestore.collection(path).onSnapshot(
-			(snapshot) => {
+			(snapshot: { docs: any[] }) => {
 				setData([
 					null,
 					false,
-					snapshot.docs.map((doc) => ({
+					snapshot.docs.map((doc: { id: number; data: () => object[] }) => ({
 						id: doc.id,
 						...doc.data(),
 					})),
 				]);
 			},
-			(error) => setData([error, false, []]),
+			(error: firebase.FirebaseError) => setData([error, false, []]),
 		);
 		return unsubscribe;
 	}, [path]);

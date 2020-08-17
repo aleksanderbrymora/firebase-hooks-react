@@ -1,1 +1,1 @@
-export type firestoreData = [Error | null, boolean, any[]];
+export type Data = [Error | null, boolean, any[]];
