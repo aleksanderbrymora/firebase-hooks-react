@@ -1,5 +1,5 @@
 import React from 'react';
-import { useReadCollection } from './firebase-hooks/firestore/useReadCollection';
+import { useReadCollection } from './firebase-hooks';
 
 const App: React.FC = () => {
 	const [error, loading, data] = useReadCollection('posts');
