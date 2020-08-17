@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import App from './App';
-import { CreateFirebaseContext } from './firebase/context/CreateFirebaseContext';
+import { CreateFirebaseContext } from './firebase-hooks';
 
 const Firebase = CreateFirebaseContext(
 	{
