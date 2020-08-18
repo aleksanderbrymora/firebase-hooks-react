@@ -4,7 +4,6 @@ import { useReadCollection, useFirestore } from './firebase-hooks';
 const App: React.FC = () => {
 	const [error, loading, data] = useFirestore({
 		collection: 'posts',
-		query: 'test',
 	});
 	return (
 		<div className='App'>
