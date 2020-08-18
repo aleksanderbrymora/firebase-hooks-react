@@ -91,7 +91,7 @@ _Note_ this variable is subject to change and will be defined in one place
 ```js
 // simple query
 // todo add `fromCache`
-const [error, loading, data] = useDocumentQuery('name', '==', 'Denver');
+const [error, loading, data] = useDocumentQuery('posts', 'test');
 
 // query with configuration
 const [error, loading, data] = useDocumentQuery({

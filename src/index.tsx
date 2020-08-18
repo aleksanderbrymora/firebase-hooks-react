@@ -14,7 +14,7 @@ const Firebase = CreateFirebaseContext(
 		appId: '1:705806228715:web:02ec668242568d339a72ae',
 		measurementId: 'G-P6TEK34DPZ',
 	},
-	['auth', 'database', 'firestore', 'storage'],
+	['auth', 'firestore', 'storage', 'database'],
 );
 
 ReactDOM.render(
