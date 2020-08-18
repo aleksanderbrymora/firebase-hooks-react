@@ -1,5 +1,5 @@
 import { createContext, useContext } from 'react';
-import { fireType } from '../types/fireContextType';
+import { fireType } from '../types/firebase-context';
 
 // Creating object to hold firebase actions in the provider and passing it into the fireContext to be available in the project
 export const fire: fireType = {};

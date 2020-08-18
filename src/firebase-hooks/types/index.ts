@@ -1,5 +1,5 @@
 // Type for Firebase Configuration object
-export * from './firebase-config-type';
+export * from './firebase-config';
 
 // Type for tech array when initialising Firebase Context
 export * from './tech-array';

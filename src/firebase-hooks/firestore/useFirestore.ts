@@ -2,21 +2,12 @@ import { useState, useEffect } from 'react';
 import { CollectionData } from '../types';
 import { useFire } from '../context';
 import handleError from './handleError';
+import { QueryTypes, InferDocType } from '../types/firestore-params';
 
-type queryType<T> = T extends string ? string : documentQueryType;
-type docType<T> = T extends string ? string : never;
-
-type documentQueryType = {
-	collection: string;
-	query: string[] | string[][];
-	limit: number;
-	orderBy: string; // todo limit this to be only special words
-	order: string; // todo same as above
-	startAt: number;
-	endAt: number;
-};
-
-export const useFirestore = <T>(query: queryType<T>, doc?: docType<T>) => {
+export const useFirestore = <QueryType extends QueryTypes>(
+	query: QueryType,
+	doc?: InferDocType<QueryType>,
+) => {
 	const [data, setData] = useState<CollectionData>([null, true, null]);
 	const { firestore } = useFire();
 

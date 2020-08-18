@@ -2,7 +2,7 @@ import React from 'react';
 import { useFirestore } from './firebase-hooks';
 
 const App: React.FC = () => {
-	const [error, loading, data] = useFirestore('posts');
+	const [error, loading, data] = useFirestore({ collection: '' });
 	return (
 		<div className='App'>
 			{error && JSON.stringify(error)}
