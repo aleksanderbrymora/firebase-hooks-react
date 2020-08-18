@@ -3,20 +3,23 @@
 	"compilerOptions": {
 		"jsx": "react",
 		"strict": true,
-		"pretty": true,
+		"pretty": false,
 		"lib": ["es6", "DOM", "es2019"],
 		"target": "es5",
 		"sourceMap": true,
-		"allowJs": true,
+		"allowJs": false,
 		"skipLibCheck": true,
 		"esModuleInterop": true,
 		"allowSyntheticDefaultImports": true,
 		"forceConsistentCasingInFileNames": true,
 		"module": "esnext",
 		"moduleResolution": "node",
-		"resolveJsonModule": true,
-		"isolatedModules": true,
-		"noEmit": true
-	},
-	"include": ["src", "firestore"]
+		"isolatedModules": false,
+		"outDir": "dist",
+		"rootDir": "src",
+		"declaration": true,
+		"removeComments": true,
+		"noImplicitAny": true,
+		"strictNullChecks": true
+	}
 }
