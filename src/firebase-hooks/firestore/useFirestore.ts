@@ -43,7 +43,7 @@ export const useFirestore = <QueryType extends QueryTypes>(
 		}
 
 		return unsubscribe; // Clean up
-	}, [query]);
+	}, [query, doc]);
 
 	return data;
 };
