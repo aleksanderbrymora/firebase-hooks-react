@@ -1,18 +1,21 @@
-export type InputObject = {
-	value: string;
+export type InputObject<T> = {
+	value: T;
 	type: string; // todo set only to available input types
 	required: boolean;
 	onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
 };
 
-export type SignupType = {
-	onSubmit: (e: React.SyntheticEvent) => Promise<void>;
+type SignupType = (e: React.SyntheticEvent) => Promise<void>;
+
+export type SignupEventType = {
+	onSubmit: SignupType;
 };
 
 export type SignupObjectType = {
 	loading: boolean;
 	error: null | Error;
-	email: InputObject;
-	password: InputObject;
-	signup: SignupType;
+	email: InputObject<string>;
+	password: InputObject<string>;
+	passwordConfirm: InputObject<string | null>;
+	onSignup: SignupEventType;
 };
