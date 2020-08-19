@@ -15,15 +15,13 @@ export const useEmailSignup = () => {
 		value: emailInput,
 		type: 'email',
 		required: true,
-		onChange: (e: React.ChangeEvent<HTMLInputElement>) =>
-			setEmail(e.target.value),
+		onChange: (e: React.ChangeEvent<HTMLInputElement>) => setEmail(e.target.value),
 	};
 	const password: InputObject = {
 		value: passwordInput,
 		type: 'password',
 		required: true,
-		onChange: (e: React.ChangeEvent<HTMLInputElement>) =>
-			setPassword(e.target.value),
+		onChange: (e: React.ChangeEvent<HTMLInputElement>) => setPassword(e.target.value),
 	};
 
 	const signup: SignupType = {
