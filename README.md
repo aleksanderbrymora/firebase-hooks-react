@@ -122,7 +122,24 @@ The hook will return:
 - `onSubmit` handler for the form
 - loading state
 - error
-- value for `email` and `password` <- if someone needs access to these values for some validation
+
+#### Usage
+
+```jsx
+const Signup = () => {
+	const { loading, error, email, password, signup } = useEmailSignup();
+	return (
+		<form {...signup}>
+			<input {...email} />
+			<input {...password} />
+			<button disabled={loading} type='submit'>
+				Sign up
+			</button>
+			<p>{JSON.stringify(error)}</p>
+		</form>
+	);
+};
+```
 
 ### Credits
 
