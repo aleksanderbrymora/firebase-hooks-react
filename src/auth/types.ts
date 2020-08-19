@@ -1,8 +1,10 @@
+import {SyntheticEvent, ChangeEvent} from 'react'
+
 export type InputObject = {
 	value: string;
 	type: string; // todo set only to available input types
 	required: boolean;
-	onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+	onChange: (e: ChangeEvent<HTMLInputElement>) => void;
 };
 
 // Return structure for every useAuth hook type
@@ -15,15 +17,15 @@ export type AuthReturnType<DataType> = [
 
 // Types for objects to be spread in the jsx elements
 export type EmailPasswordEventType = {
-	onSubmit: (e: React.SyntheticEvent) => Promise<void>;
+	onSubmit: (e: SyntheticEvent) => Promise<void>;
 };
 
 export type SignoutEventType = {
-	onClick: (e: React.SyntheticEvent) => Promise<void>;
+	onClick: (e: SyntheticEvent) => Promise<void>;
 };
 
 export type EmailPasswordConfirmType = {
-	onSubmit: (e: React.SyntheticEvent) => Promise<void>;
+	onSubmit: (e: SyntheticEvent) => Promise<void>;
 };
 
 // DataType types for useAuth
