@@ -1,21 +1,34 @@
-export type InputObject<T> = {
-	value: T;
+export type InputObject = {
+	value: string;
 	type: string; // todo set only to available input types
 	required: boolean;
 	onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
 };
 
-type SignupType = (e: React.SyntheticEvent) => Promise<void>;
+// Return structure for every useAuth hook type
+// DataType is different depending on what type of auth is chosen
+export type AuthReturnType<DataType> = [
+	boolean, // loading
+	null | Error, // error
+	DataType,
+];
 
+// Types for objects to be spread in the jsx elements
 export type SignupEventType = {
-	onSubmit: SignupType;
+	onSubmit: (e: React.SyntheticEvent) => Promise<void>;
 };
 
-export type SignupObjectType = {
-	loading: boolean;
-	error: null | Error;
-	email: InputObject<string>;
-	password: InputObject<string>;
-	passwordConfirm: InputObject<string | null>;
+export type SignoutEventType = {
+	onClick: (e: React.SyntheticEvent) => Promise<void>;
+};
+
+// DataType types for useAuth
+export type SignupDataType = {
+	email: InputObject;
+	password: InputObject;
 	onSignup: SignupEventType;
+};
+
+export type SignoutDataType = {
+	signout: SignoutEventType;
 };

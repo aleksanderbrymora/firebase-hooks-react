@@ -44,7 +44,7 @@ import { useReadCollection } from 'firebase-hooks/firestore';
 const App = () => {
 	const [error, loading, data] = useReadCollection('posts');
 	return (
-		<div className='App'>
+		<div className="App">
 			{error && JSON.stringify(error)}
 			{loading ? <p>Loading...</p> : <p>{JSON.stringify(data)}</p>}
 		</div>
@@ -54,26 +54,27 @@ const App = () => {
 
 ## TODO
 
-- Main
-  - [ ] cache (maybe?)
-    - [ ] add caching for the responses from databases
-    - [ ] add a flag thats saying data is stale and its currently loading
-  - [ ] add provider element for hooks to utilise. The idea is to create a custom provider that has access to firebase functions wrapped with hooks, so the user has to only wrap his `<App/>` with provider, then hooks will be configured to consume that context.
-- Firestore hooks
-  - [x] read all documents in the collection
-  - [ ] get document by id
-- Auth hooks
-  - [ ] Login user
-  - [ ] Add current user lookup function
-  - [ ] Sign up user
-  - [ ] Hooks for all signup methods
-- Realtime DB hooks
-- Storage hooks
+-    Main
+     -    [ ] cache (maybe?)
+          -    [ ] add caching for the responses from databases
+          -    [ ] add a flag thats saying data is stale and its currently loading
+     -    [ ] add provider element for hooks to utilise. The idea is to create a custom provider that has access to firebase functions wrapped with hooks, so the user has to only wrap his `<App/>` with provider, then hooks will be configured to consume that context.
+-    Firestore hooks
+     -    [x] read all documents in the collection
+     -    [ ] get document by id
+-    Auth hooks
+     -    [ ] Login user
+     -    [ ] STRETCH GOAL: add support for Concurrent mode: when checking for user there is a time period where current user is being loaded in and there can be a burst of unloaded content shown to the user, which is ofc bad UX
+     -    [ ] Add current user lookup function
+     -    [ ] Sign up user
+     -    [ ] Hooks for all signup methods
+-    Realtime DB hooks
+-    Storage hooks
 
 Stretch goals:
 
-- Static type checking for queries by asking user to input his db structure
-- Dynamic imports of for only needed firebase parts, ie only `import "firebase/firestore"` when actually using firestore
+-    Static type checking for queries by asking user to input his db structure
+-    Dynamic imports of for only needed firebase parts, ie only `import "firebase/firestore"` when actually using firestore
 
 ## Firestore
 
@@ -84,9 +85,9 @@ _Note_ this variable is subject to change and will be defined in one place
 
 #### Operations
 
-- Get whole collection
-- Get one doc by id
-- Get docs by filter query
+-    Get whole collection
+-    Get one doc by id
+-    Get docs by filter query
 
 ```js
 // simple query
@@ -109,8 +110,8 @@ const [error, loading, data] = useDocumentQuery({
 });
 ```
 
-- Add doc to collection
-- Set doc in the collection (similar to add, but overwrites if already exists)
+-    Add doc to collection
+-    Set doc in the collection (similar to add, but overwrites if already exists)
 
 ## Auth
 
@@ -118,10 +119,10 @@ const [error, loading, data] = useDocumentQuery({
 
 The hook will return:
 
-- object with `onChange` handler and `value` for both `email` and `password` <- this is the main way for peeps to use this hook, they will spread that object to add functionality to input
-- `onSubmit` handler for the form
-- loading state
-- error
+-    object with `onChange` handler and `value` for both `email` and `password` <- this is the main way for peeps to use this hook, they will spread that object to add functionality to input
+-    `onSubmit` handler for the form
+-    loading state
+-    error
 
 #### Usage
 
@@ -132,7 +133,7 @@ const Signup = () => {
 		<form {...signup}>
 			<input {...email} />
 			<input {...password} />
-			<button disabled={loading} type='submit'>
+			<button disabled={loading} type="submit">
 				Sign up
 			</button>
 			<p>{JSON.stringify(error)}</p>
@@ -143,7 +144,7 @@ const Signup = () => {
 
 ### Credits
 
-- [Using firebase with react hooks](https://benmcmahen.com/using-firebase-with-react-hooks/)
-- [Building custom React Hooks to fetch data from Firebase Firestore](https://www.williamkurniawan.com/blog/building-custom-react-hooks-to-fetch-data-from-firebase-firestore)
-- [useAuth hook](https://usehooks.com/useAuth/)
-- [lazy loading elements](https://medium.com/@prawira/react-conditional-import-conditional-css-import-110cc58e0da6)
+-    [Using firebase with react hooks](https://benmcmahen.com/using-firebase-with-react-hooks/)
+-    [Building custom React Hooks to fetch data from Firebase Firestore](https://www.williamkurniawan.com/blog/building-custom-react-hooks-to-fetch-data-from-firebase-firestore)
+-    [useAuth hook](https://usehooks.com/useAuth/)
+-    [lazy loading elements](https://medium.com/@prawira/react-conditional-import-conditional-css-import-110cc58e0da6)

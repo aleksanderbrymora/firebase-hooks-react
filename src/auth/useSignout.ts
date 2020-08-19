@@ -1,37 +1,30 @@
 import { useState } from 'react';
 import { useFire } from '../context/FirebaseContext';
+import { AuthReturnType, SignoutDataType } from './types';
 
-type StatusType = [boolean, Error | null, boolean];
-
-type SignoutType = {
-	status: StatusType;
-	signout: SignoutObjectType;
-};
-
-type SignoutObjectType = {
-	onClick: (e: React.SyntheticEvent) => void;
-};
-
-export const useSignout = () => {
-	// [loading, error, done]
+export const useSignout = (callback?: () => any) => {
 	const { auth } = useFire();
-	const [status, setStatus] = useState<StatusType>([false, null, false]);
-	const signOutObject: SignoutObjectType = {
-		onClick: async e => {
-			setStatus([true, null, false]);
+	const [loading, setLoading] = useState<boolean>(false);
+	const [error, setError] = useState<null | Error>(null);
+	const signOutObject = {
+		onClick: async () => {
+			setLoading(true);
 			try {
 				await auth!.signOut();
-				setStatus([false, null, true]);
+				setLoading(false);
+				if (callback) callback();
 			} catch (error) {
-				setStatus([false, error, true]);
+				setLoading(false);
+				setError(error);
 			}
 		},
 	};
 
-	const SignoutReturn: SignoutType = {
-		status,
-		signout: signOutObject,
-	};
+	const SignoutReturn: AuthReturnType<SignoutDataType> = [
+		loading,
+		error,
+		{ signout: signOutObject },
+	];
 
 	return SignoutReturn;
 };
