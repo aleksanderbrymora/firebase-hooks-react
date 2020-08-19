@@ -112,6 +112,35 @@ const [error, loading, data] = useDocumentQuery({
 - Add doc to collection
 - Set doc in the collection (similar to add, but overwrites if already exists)
 
+## Auth
+
+### Email sign up
+
+The hook will return:
+
+- object with `onChange` handler and `value` for both `email` and `password` <- this is the main way for peeps to use this hook, they will spread that object to add functionality to input
+- `onSubmit` handler for the form
+- loading state
+- error
+
+#### Usage
+
+```jsx
+const Signup = () => {
+	const { loading, error, email, password, signup } = useEmailSignup();
+	return (
+		<form {...signup}>
+			<input {...email} />
+			<input {...password} />
+			<button disabled={loading} type='submit'>
+				Sign up
+			</button>
+			<p>{JSON.stringify(error)}</p>
+		</form>
+	);
+};
+```
+
 ### Credits
 
 - [Using firebase with react hooks](https://benmcmahen.com/using-firebase-with-react-hooks/)
