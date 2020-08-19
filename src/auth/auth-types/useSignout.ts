@@ -1,6 +1,6 @@
 import { useState } from 'react';
-import { useFire } from '../context/FirebaseContext';
-import { AuthReturnType, SignoutDataType } from './types';
+import { useFire } from '../../context/FirebaseContext';
+import { AuthReturnType, SignoutDataType } from '../types';
 
 export const useSignout = (callback?: () => any) => {
 	const { auth } = useFire();
@@ -23,7 +23,7 @@ export const useSignout = (callback?: () => any) => {
 	const SignoutReturn: AuthReturnType<SignoutDataType> = [
 		loading,
 		error,
-		{ signout: signOutObject },
+		{ onSignout: signOutObject },
 	];
 
 	return SignoutReturn;

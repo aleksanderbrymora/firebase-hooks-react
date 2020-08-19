@@ -14,7 +14,7 @@ export type AuthReturnType<DataType> = [
 ];
 
 // Types for objects to be spread in the jsx elements
-export type SignupEventType = {
+export type EmailPasswordEventType = {
 	onSubmit: (e: React.SyntheticEvent) => Promise<void>;
 };
 
@@ -22,13 +22,24 @@ export type SignoutEventType = {
 	onClick: (e: React.SyntheticEvent) => Promise<void>;
 };
 
+export type EmailPasswordConfirmType = {
+	onSubmit: (e: React.SyntheticEvent) => Promise<void>;
+};
+
 // DataType types for useAuth
-export type SignupDataType = {
+export type EmailPasswordDataType = {
 	email: InputObject;
 	password: InputObject;
-	onSignup: SignupEventType;
+	onSignup: EmailPasswordEventType;
+};
+
+export type EmailPasswordConfirmDataType = {
+	email: InputObject;
+	password: InputObject;
+	confirmation: InputObject;
+	onSignup: EmailPasswordEventType;
 };
 
 export type SignoutDataType = {
-	signout: SignoutEventType;
+	onSignout: SignoutEventType;
 };
