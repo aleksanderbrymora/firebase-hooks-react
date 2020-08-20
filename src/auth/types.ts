@@ -1,4 +1,6 @@
-import {SyntheticEvent, ChangeEvent} from 'react'
+import { SyntheticEvent, ChangeEvent } from 'react';
+
+export type CallbackType = () => void;
 
 export type InputObject = {
 	value: string;
@@ -24,8 +26,12 @@ export type SignoutEventType = {
 	onClick: (e: SyntheticEvent) => Promise<void>;
 };
 
-export type EmailPasswordConfirmType = {
+export type EmailPasswordConfirmEventType = {
 	onSubmit: (e: SyntheticEvent) => Promise<void>;
+};
+
+export type ProviderEventType = {
+	onClick: (e: SyntheticEvent) => Promise<void>;
 };
 
 // DataType types for useAuth
@@ -44,4 +50,8 @@ export type EmailPasswordConfirmDataType = {
 
 export type SignoutDataType = {
 	onSignout: SignoutEventType;
+};
+
+export type ProviderDataType = {
+	google: ProviderEventType;
 };

@@ -1,8 +1,16 @@
 import { useEmailPassword } from './auth-types/useEmailPassword';
-import { AuthReturnType, InputObject } from './types';
+import {
+	AuthReturnType,
+	InputObject,
+	ProviderEventType,
+	SignoutEventType,
+	EmailPasswordEventType,
+} from './types';
 import { SyntheticEvent } from 'react';
 import { useSignout } from './auth-types/useSignout';
 import { useEmailPasswordConfirm } from './auth-types/useEmailPasswordConfirm';
+import { useProviderPopup } from './auth-types/useProviderPopup';
+import { googleProvider } from './auth-types/authProviders';
 
 type AuthType =
 	| 'emailPassword'
@@ -21,8 +29,9 @@ interface AllReturnElements {
 	email?: InputObject;
 	password?: InputObject;
 	confirmation?: InputObject;
-	onSignup?: { onSubmit: (e: SyntheticEvent) => void };
-	onSignout?: { onClick: (e: SyntheticEvent) => void };
+	onSignup?: EmailPasswordEventType;
+	onSignout?: SignoutEventType;
+	google?: ProviderEventType;
 }
 
 export const useAuth = (
@@ -37,6 +46,8 @@ export const useAuth = (
 			return useSignout(callback);
 		case 'emailPasswordConfirm':
 			return useEmailPasswordConfirm(callback);
+		case 'google':
+			return useProviderPopup(googleProvider, callback);
 
 		default:
 			// handling wrong type of auth action

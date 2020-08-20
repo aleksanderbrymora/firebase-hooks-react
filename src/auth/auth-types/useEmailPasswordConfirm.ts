@@ -2,7 +2,7 @@ import { useEmailPassword } from './useEmailPassword';
 import { useState } from 'react';
 import {
 	InputObject,
-	EmailPasswordConfirmType,
+	EmailPasswordConfirmEventType,
 	AuthReturnType,
 	EmailPasswordConfirmDataType,
 } from '../types';
@@ -42,7 +42,7 @@ export const useEmailPasswordConfirm = (callback?: () => void) => {
 		}
 	};
 
-	const onSignup: EmailPasswordConfirmType = {
+	const onSignup: EmailPasswordConfirmEventType = {
 		onSubmit: signupAction,
 	};
 
