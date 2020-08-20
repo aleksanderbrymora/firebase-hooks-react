@@ -36,7 +36,7 @@ export const useFirestore = <QueryType extends QueryTypes>(
 							})),
 						]);
 					},
-					(error) => setData([error, false, []]),
+					error => setData([error, false, []]),
 				);
 			}
 		} else {
