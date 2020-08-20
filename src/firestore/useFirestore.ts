@@ -3,15 +3,20 @@ import { CollectionData } from '../types';
 import { useFire } from '../context';
 import handleError from './handleError';
 import { QueryTypes, InferDocType } from '../types/firestore-params';
+import { handleUser } from '../utils/convertToWithUser';
+import { useR } from '../auth/useR';
 
 export const useFirestore = <QueryType extends QueryTypes>(
 	query: QueryType,
 	doc?: InferDocType<QueryType>,
 ) => {
-	const [data, setData] = useState<CollectionData>([null, true, null]);
+	const [data, setData] = useState<CollectionData>([true, null, null]);
 	const { firestore } = useFire();
+	const { user } = useR();
 
 	handleError(firestore); // handle if not imported
+
+	query = handleUser(query, user) as QueryType; // not sure if that actually fixed it
 
 	// todo this is going to be a dense piece of code and it will need refactoring
 	useEffect(() => {
@@ -22,21 +27,21 @@ export const useFirestore = <QueryType extends QueryTypes>(
 					.collection(query)
 					.doc(doc)
 					.onSnapshot((snapshot: firebase.firestore.DocumentData) => {
-						setData([null, false, snapshot.data()]);
+						setData([false, null, snapshot.data()]);
 					});
 			} else {
 				unsubscribe = firestore!.collection(query).onSnapshot(
 					(snapshot: firebase.firestore.QuerySnapshot) => {
 						setData([
-							null,
 							false,
+							null,
 							snapshot.docs.map((doc: firebase.firestore.DocumentData) => ({
 								id: doc.id,
 								...doc.data(),
 							})),
 						]);
 					},
-					error => setData([error, false, []]),
+					error => setData([false, error, []]),
 				);
 			}
 		} else {

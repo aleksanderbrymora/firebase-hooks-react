@@ -1,6 +1,6 @@
 export type CollectionData = [
-	Error | null,
 	boolean,
+	Error | null,
 	firebase.firestore.DocumentData | firebase.firestore.DocumentData[] | null, // this might be a bit broken
 ];
 

@@ -6,7 +6,6 @@ import {
 	SignoutEventType,
 	EmailPasswordEventType,
 } from './types';
-import { SyntheticEvent } from 'react';
 import { useSignout } from './auth-types/useSignout';
 import { useEmailPasswordConfirm } from './auth-types/useEmailPasswordConfirm';
 import { useProviderPopup } from './auth-types/useProviderPopup';
