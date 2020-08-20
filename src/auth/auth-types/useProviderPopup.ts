@@ -10,7 +10,7 @@ export const useProviderPopup = (
 	const [error, setError] = useState<null | Error>(null);
 	const { auth } = useFire();
 
-	const signupAction = async (e: SyntheticEvent) => {
+	const signupAction = async () => {
 		setLoading(true);
 		try {
 			await auth!.signInWithPopup(provider);
