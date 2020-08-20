@@ -53,5 +53,5 @@ export type SignoutDataType = {
 };
 
 export type ProviderDataType = {
-	google: ProviderEventType;
+	popup: ProviderEventType;
 };

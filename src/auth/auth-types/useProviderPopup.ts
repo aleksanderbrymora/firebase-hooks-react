@@ -21,11 +21,15 @@ export const useProviderPopup = (
 		}
 	};
 
-	const google = {
+	const popupObject = {
 		onClick: signupAction,
 	};
 
-	const signupObject: AuthReturnType<ProviderDataType> = [loading, error, { google }];
+	const signupObject: AuthReturnType<ProviderDataType> = [
+		loading,
+		error,
+		{ popup: popupObject },
+	];
 
 	return signupObject;
 };

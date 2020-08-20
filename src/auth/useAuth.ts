@@ -10,7 +10,7 @@ import { SyntheticEvent } from 'react';
 import { useSignout } from './auth-types/useSignout';
 import { useEmailPasswordConfirm } from './auth-types/useEmailPasswordConfirm';
 import { useProviderPopup } from './auth-types/useProviderPopup';
-import { googleProvider } from './auth-types/authProviders';
+import { googleProvider, facebookProvider } from './auth-types/authProviders';
 
 type AuthType =
 	| 'emailPassword'
@@ -31,7 +31,7 @@ interface AllReturnElements {
 	confirmation?: InputObject;
 	onSignup?: EmailPasswordEventType;
 	onSignout?: SignoutEventType;
-	google?: ProviderEventType;
+	popup?: ProviderEventType;
 }
 
 export const useAuth = (
@@ -48,7 +48,8 @@ export const useAuth = (
 			return useEmailPasswordConfirm(callback);
 		case 'google':
 			return useProviderPopup(googleProvider, callback);
-
+		case 'facebook':
+			return useProviderPopup(facebookProvider, callback);
 		default:
 			// handling wrong type of auth action
 			throw new Error('No auth method with of type');
