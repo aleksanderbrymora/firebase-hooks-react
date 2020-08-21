@@ -55,3 +55,8 @@ export type SignoutDataType = {
 export type ProviderDataType = {
 	popup: ProviderEventType;
 };
+
+export type ProviderOptions = {
+	scopes: string[];
+	customParameters: Object;
+};
