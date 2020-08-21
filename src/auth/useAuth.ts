@@ -15,6 +15,8 @@ import {
 	facebookProvider,
 	twitterProvider,
 	githubProvider,
+	appleProvider,
+	microsoftProvider,
 } from './auth-types/authProviders';
 
 type AuthType =
@@ -60,6 +62,10 @@ export const useAuth = (
 			return useProviderPopup(twitterProvider, providerOptions, callback);
 		case 'github':
 			return useProviderPopup(githubProvider, providerOptions, callback);
+		case 'apple':
+			return useProviderPopup(appleProvider, providerOptions, callback);
+		case 'microsoft':
+			return useProviderPopup(microsoftProvider, providerOptions, callback);
 		default:
 			// handling wrong type of auth action
 			throw new Error('No auth method with of type');
