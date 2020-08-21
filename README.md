@@ -12,8 +12,8 @@ I recently had pretty bad experience with explaining configuration, organization
 ```jsx
 // Add these to index.js
 import { FirebaseContextCreate } from 'firebase-hooks'; // todo come up with name
-import * as React from 'react';
-import * as ReactDOM from 'react-dom';
+import React from 'react';
+import ReactDOM from 'react-dom';
 import App from './App';
 
 const Firebase = FirebaseContextCreate(
@@ -56,40 +56,6 @@ _Note_ this variable is subject to change and will be defined in one place.
 Hook returns always an array of loading, error and data, where data is information available from each method. In that object there are handlers for `onChange` or `onSubmit` and other abstractions so you dont have to worry about handling inputs at all. Details about each method present in auth docs.
 
 `useR` hook is a hook that returns information about the user and if hes being loaded in.
-
-Here is an example of simple login with password
-
-```jsx
-const Signup = () => {
-	const [ loading, error, { email, password, signup } ] = useAuth('emailPassword');
-	return (
-		<form {...signup}>
-			<input {...email} />
-			<input {...password} />
-			<button disabled={loading} type="submit">
-				Sign up
-			</button>
-			<p>{JSON.stringify(error)}</p>
-		</form>
-	);
-};
-```
-And here is an example of login with google with simple callback function
-
-```jsx
-const Google = () => {
-	const [loading, error, { google }] = useAuth('google', () =>
-		console.log('w?'),
-	);
-
-	return (
-		<button disabled={loading} {...google}>
-			Sign up with Google
-		</button>
-	);
-};
-```
-
 
 ### Credits
 

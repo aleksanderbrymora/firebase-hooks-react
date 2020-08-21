@@ -1,9 +1,12 @@
+import firebase from 'firebase/app';
 import { useFire } from '../../context/FirebaseContext';
-import { useState, SyntheticEvent } from 'react';
-import { CallbackType, AuthReturnType, ProviderDataType } from '../types';
+import { useState } from 'react';
+import { CallbackType, AuthReturnType, ProviderDataType, ProviderOptions } from '../types';
+import { ProviderType } from './authProviders';
 
 export const useProviderPopup = (
-	provider: firebase.auth.GoogleAuthProvider,
+	provider: ProviderType,
+	providerOptions?: ProviderOptions,
 	callback?: CallbackType,
 ) => {
 	const [loading, setLoading] = useState(false);
@@ -13,6 +16,16 @@ export const useProviderPopup = (
 	const signupAction = async () => {
 		setLoading(true);
 		try {
+			if (providerOptions?.customParameters) {
+				provider.setCustomParameters(providerOptions.customParameters);
+			}
+			// Twitter is one of the only providers without the addScope method
+			if (
+				providerOptions?.scopes &&
+				!(provider instanceof firebase.auth.TwitterAuthProvider)
+			) {
+				providerOptions.scopes.forEach(s => provider.addScope(s));
+			}
 			await auth!.signInWithPopup(provider);
 			if (callback) callback();
 		} catch (error) {
