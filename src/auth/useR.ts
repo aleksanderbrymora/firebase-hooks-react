@@ -1,5 +1,5 @@
-import {useEffect, useState} from 'react';
-import {useFire} from '../context';
+import { useEffect, useState } from 'react';
+import { useFire } from '../context';
 
 export const useR = () => {
 	const [loading, setLoading] = useState<boolean>(false);

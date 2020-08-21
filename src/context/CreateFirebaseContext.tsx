@@ -10,10 +10,7 @@ import 'firebase/database';
 import 'firebase/storage';
 import 'firebase/auth';
 
-export const CreateFirebaseContext = (
-	firebaseConfig: firebaseConfigType,
-	tech: techArray,
-) => {
+export const CreateFirebaseContext = (firebaseConfig: firebaseConfigType, tech: techArray) => {
 	// initialize app
 	const app: firebase.app.App = firebase.initializeApp(firebaseConfig);
 
@@ -24,9 +21,7 @@ export const CreateFirebaseContext = (
 	if (tech.includes('storage')) fire.storage = app.storage();
 
 	// create fireProvider wrapper
-	const FireProvider: React.FC<{ children: React.ReactNode }> = ({
-		children,
-	}) => (
+	const FireProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => (
 		<FirebaseContext.Provider value={fire}>{children}</FirebaseContext.Provider>
 	);
 
