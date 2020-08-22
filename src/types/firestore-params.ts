@@ -1,7 +1,6 @@
 // Type for the query data
 export type FirestoreQueryType = {
 	collection: string;
-	doc?: string;
 	query?: queryType | queryType[];
 	limit?: number;
 	orderBy?: string; // todo limit this to be only special words
