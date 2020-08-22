@@ -1,6 +1,6 @@
 import { useFire } from '../context';
 import handleError from './handleError';
-import { QueryTypes, InferDocType } from '../types/firestore/params';
+import { QueryTypes, InferDocType, FirestoreQueryType } from '../types/firestore/params';
 import { handleUser } from '../utils/convertToWithUser';
 import { useR } from '../auth/useR';
 import { useReadCollection } from './useReadCollection';
@@ -11,12 +11,8 @@ import { InferReturnType, CollectionData, DocumentData } from '../types/firestor
 export const useReadFS = <QueryType extends QueryTypes, Doc extends InferDocType<QueryType>>(
 	query: QueryType,
 	doc?: Doc,
-): CollectionData | DocumentData => {
 	// Todo this needs to be made type-safe with `inferReturnType`
-	// const [loading, setLoading] = useState<boolean>(false);
-	// const [error, setError] = useState<null | Error>(null);
-	// const [data, setData] = useState<CollectionData>([true, null, null]);
-
+): CollectionData | DocumentData => {
 	// Checking if firestore has been initialized
 	const { firestore } = useFire();
 	handleError(firestore); // handle if not imported
@@ -37,8 +33,10 @@ export const useReadFS = <QueryType extends QueryTypes, Doc extends InferDocType
 			// useReadCollection
 			return useReadCollection(query);
 		}
-	} else {
+	} else if ('collection' in query) {
 		// useReadQuery
-		return useQuery(query);
+		return useQuery(query as FirestoreQueryType); // not sure if casting it is the way
+	} else {
+		throw new Error("You haven't passed correct information");
 	}
 };

@@ -16,7 +16,6 @@ export const handleUser = (query: QueryTypes, user: false | firebase.User): Quer
 		return {
 			...query,
 			collection: convertToWithUser(query.collection, user),
-			doc: query.doc && convertToWithUser(query.doc, user),
 		};
 	}
 };
