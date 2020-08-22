@@ -1,2 +1,2 @@
 export * from './useReadCollection';
-export * from './useFirestore';
+export * from './useReadFS';

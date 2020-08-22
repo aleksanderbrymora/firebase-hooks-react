@@ -1,20 +1,24 @@
 // Type for the query data
 export type FirestoreQueryType = {
 	collection: string;
-	doc?: string;
-	query?: queryType | queryType[];
+	where?: queryType | queryType[];
 	limit?: number;
-	orderBy?: string; // todo limit this to be only special words
+	orderBy?: orderByType; // todo limit this to be only special words
 	order?: string; // todo same as above
 	startAt?: number;
 	endAt?: number;
 };
 
-type queryType = [
-	string,
-	'<' | '<=' | '==' | '>' | '>=' | 'array-contains' | 'in' | 'array-contains-any',
-	string | number | boolean,
-];
+type orderByType = {
+	by: string;
+	type: 'desc' | 'asc' | undefined;
+};
+
+export type queryType = {
+	fieldPath: string;
+	optionString: firebase.firestore.WhereFilterOp;
+	value: string | number | boolean;
+};
 
 // Type to handle two different queries
 export type QueryTypes = string | FirestoreQueryType;

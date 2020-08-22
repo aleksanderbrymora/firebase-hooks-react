@@ -1,6 +1,6 @@
 import React from 'react';
 import { firebaseConfigType } from '../types';
-import { techArray } from '../types/tech-array';
+import { techArray } from '../types/firebase/tech-array';
 import { fire, FirebaseContext } from './FirebaseContext';
 
 // import all of the pieces for firebase

@@ -1,4 +1,4 @@
-import { QueryTypes } from '../types/firestore-params';
+import { QueryTypes } from '../types/firestore/params';
 export const FIRE_USER = '__user';
 
 export const convertToWithUser = (path: string, user: false | firebase.User): string => {
@@ -16,7 +16,6 @@ export const handleUser = (query: QueryTypes, user: false | firebase.User): Quer
 		return {
 			...query,
 			collection: convertToWithUser(query.collection, user),
-			doc: query.doc && convertToWithUser(query.doc, user),
 		};
 	}
 };
