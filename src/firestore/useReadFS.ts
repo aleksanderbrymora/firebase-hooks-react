@@ -1,21 +1,18 @@
-import { useState, useEffect } from 'react';
-import { CollectionData } from '../types';
 import { useFire } from '../context';
 import handleError from './handleError';
-import { QueryTypes, InferDocType } from '../types/firestore-params';
+import { QueryTypes, InferDocType } from '../types/firestore/params';
 import { handleUser } from '../utils/convertToWithUser';
 import { useR } from '../auth/useR';
+import { useReadCollection } from './useReadCollection';
+import { useReadDoc } from './useReadDoc';
+import { useQuery } from './useQuery';
+import { InferReturnType, CollectionData, DocumentData } from '../types/firestore/data';
 
-type InferReturnType<T> = [
-	boolean,
-	null | Error,
-	T extends string ? firebase.firestore.DocumentData : firebase.firestore.DocumentData[],
-];
-
-export const useReadFS = <QueryType extends QueryTypes>(
+export const useReadFS = <QueryType extends QueryTypes, Doc extends InferDocType<QueryType>>(
 	query: QueryType,
-	doc?: InferDocType<QueryType>,
-): InferReturnType<QueryType> => {
+	doc?: Doc,
+): CollectionData | DocumentData => {
+	// Todo this needs to be made type-safe with `inferReturnType`
 	// const [loading, setLoading] = useState<boolean>(false);
 	// const [error, setError] = useState<null | Error>(null);
 	// const [data, setData] = useState<CollectionData>([true, null, null]);
@@ -32,40 +29,16 @@ export const useReadFS = <QueryType extends QueryTypes>(
 	// - collection string - useReadCollection => array of document objects
 	// - collection string + doc string - useReadDoc => document object
 	// - query object - useReadQuery => array of document objects
-	useEffect(() => {
-		let unsubscribe; // Variable to keep unsubscribe methods from firebase
-		// checking if query is a string
-		if (typeof query === 'string') {
-			if (doc) {
-				// useReadCollection
-				unsubscribe = firestore!
-					.collection(query)
-					.doc(doc)
-					.onSnapshot((snapshot: firebase.firestore.DocumentData) => {
-						setData([false, null, snapshot.data()]);
-					});
-			} else {
-				// useReadDoc
-				unsubscribe = firestore!.collection(query).onSnapshot(
-					(snapshot: firebase.firestore.QuerySnapshot) => {
-						setData([
-							false,
-							null,
-							snapshot.docs.map((doc: firebase.firestore.DocumentData) => ({
-								id: doc.id,
-								...doc.data(),
-							})),
-						]);
-					},
-					error => setData([false, error, []]),
-				);
-			}
+	if (typeof query === 'string') {
+		if (typeof doc === 'string') {
+			// useReadDoc
+			return useReadDoc(query, doc);
 		} else {
-			// useReadQuery
+			// useReadCollection
+			return useReadCollection(query);
 		}
-
-		return unsubscribe; // Clean up
-	}, [query, doc]);
-
-	return data;
+	} else {
+		// useReadQuery
+		return useQuery(query);
+	}
 };

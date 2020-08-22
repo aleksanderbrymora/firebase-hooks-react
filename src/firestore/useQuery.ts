@@ -1,8 +1,9 @@
-import { useState, useEffect, useContext } from 'react';
+import { useState, useEffect } from 'react';
 import { useFire } from '../context';
+import { FirestoreQueryType } from '../types/firestore/params';
 import { CollectionData } from '../types/firestore/data';
 
-export const useReadCollection = (path: string): CollectionData => {
+export const useQuery = (path: FirestoreQueryType): CollectionData => {
 	const [data, setData] = useState<CollectionData>([true, null, []]);
 	const { firestore } = useFire();
 

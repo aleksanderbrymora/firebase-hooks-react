@@ -1,8 +1,8 @@
 // Type for Firebase Configuration object
-export * from './firebase-config';
+export * from './firebase/config';
 
 // Type for tech array when initialising Firebase Context
-export * from './tech-array';
+export * from './firebase/tech-array';
 
 // Type for data comming from firestore
 export * from './firestore-data';
