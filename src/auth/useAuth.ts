@@ -33,11 +33,17 @@ type AuthType =
   | 'signout';
 
 interface AllReturnElements {
+  /** email object thats meant to be spread on the input field */
   email?: InputObject;
+  /** password object thats meant to be spread on the input field */
   password?: InputObject;
+  /** password confirmation object thats meant to be spread on the input field */
   confirmation?: InputObject;
+  /** onSignup object thats meant to be spread on the form, like an onSubmit action */
   onSignup?: EmailPasswordEventType;
+  /** onSignout object thats meant to be spread on the button, like onClick action */
   onSignout?: SignoutEventType;
+  /** signup with popup object thats meant to be spread on the button, like onClick action */
   popup?: ProviderEventType;
 }
 

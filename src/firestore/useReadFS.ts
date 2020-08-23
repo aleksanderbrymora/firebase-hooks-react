@@ -13,6 +13,15 @@ import { useQuery } from './useQuery';
 import { useReadCollection } from './useReadCollection';
 import { useReadDoc } from './useReadDoc';
 
+/**
+ *
+ * @param {string|object} query - Is either a `string` or an `object`.
+ * If its an object then it takes on the structure of an object with at least `collection` string
+ * Read more about the [query object here](/docs/auth.md) // todo fix this path
+ * If its a string then the doc parameter is allowed, but by itself will query the whole collection
+ * @param {string} doc - only can be used when `query` is a string.
+ * If passed then hook will do a doc query
+ */
 export const useReadFS = <QueryType extends QueryTypes>(
   query: QueryType,
   doc?: InferDocType<QueryType>,
@@ -26,10 +35,6 @@ export const useReadFS = <QueryType extends QueryTypes>(
   const { user } = useR();
   const withUserQuery = handleUser(query, user) as QueryType; // not sure if that actually fixed it
 
-  // There are 3 parts to this hook:
-  // - collection string - useReadCollection => array of document objects
-  // - collection string + doc string - useReadDoc => document object
-  // - query object - useReadQuery => array of document objects
   if (typeof withUserQuery === 'string') {
     return typeof doc === 'string'
       ? useReadDoc(withUserQuery, doc)
