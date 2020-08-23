@@ -59,7 +59,7 @@ Hook returns always an array of loading, error and data, where data is informati
 
 ### Credits
 
--    [Using firebase with react hooks](https://benmcmahen.com/using-firebase-with-react-hooks/)
--    [Building custom React Hooks to fetch data from Firebase Firestore](https://www.williamkurniawan.com/blog/building-custom-react-hooks-to-fetch-data-from-firebase-firestore)
--    [useAuth hook](https://usehooks.com/useAuth/)
--    [lazy loading elements](https://medium.com/@prawira/react-conditional-import-conditional-css-import-110cc58e0da6)
+- [Using firebase with react hooks](https://benmcmahen.com/using-firebase-with-react-hooks/)
+- [Building custom React Hooks to fetch data from Firebase Firestore](https://www.williamkurniawan.com/blog/building-custom-react-hooks-to-fetch-data-from-firebase-firestore)
+- [useAuth hook](https://usehooks.com/useAuth/)
+- [lazy loading elements](https://medium.com/@prawira/react-conditional-import-conditional-css-import-110cc58e0da6)
