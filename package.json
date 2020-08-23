@@ -28,17 +28,21 @@
 		"prepublish": "yarn build",
 		"start": "tsc --watch",
 		"build": "yarn clean && tsc",
+		"lint": "eslint --ext .tsx,.ts --fix src/",
 		"clean": "rm -rf ./dist"
+	},
+	"dependencies": {
+		"firebase": "^7.17.2"
 	},
 	"peerDependencies": {
 		"react": "16.x",
-		"react-dom": "16.x",
-		"typescript": "^3.7.2"
+		"react-dom": "16.x"
 	},
 	"devDependencies": {
 		"@testing-library/jest-dom": "^4.2.4",
 		"@testing-library/react": "^9.3.2",
 		"@testing-library/user-event": "^7.1.2",
+		"@types/faker": "^4.1.12",
 		"@types/jest": "^24.0.0",
 		"@types/node": "^12.0.0",
 		"@types/react": "^16.9.0",
@@ -54,8 +58,9 @@
 		"eslint-plugin-react": "^7.20.6",
 		"eslint-plugin-react-hooks": "^4.1.0",
 		"faker": "^4.1.0",
-		"firebase": "^7.17.2",
 		"prettier": "^2.0.5",
-		"@types/faker": "^4.1.12"
+		"react": "^16.13.1",
+		"react-dom": "^16.13.1",
+		"typescript": "^4.0.2"
 	}
 }
