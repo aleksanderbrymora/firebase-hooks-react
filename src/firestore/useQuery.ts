@@ -3,6 +3,10 @@ import { useFire } from '../context';
 import { FirestoreQueryType, queryType } from '../types/firestore/params';
 import { CollectionData } from '../types/firestore/data';
 
+/**
+ * Hook that takes an object with compound query and filters/limits the data from the firestore
+ * @param {FirestoreQueryType} q - query object containing data necessary for a compound query
+ */
 export const useQuery = (q: FirestoreQueryType): CollectionData => {
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<null | Error>(null);

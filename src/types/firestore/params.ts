@@ -3,8 +3,8 @@ export type FirestoreQueryType = {
   collection: string;
   where?: queryType | queryType[];
   limit?: number;
-  orderBy?: orderByType; // todo limit this to be only special words
-  order?: string; // todo same as above
+  orderBy?: orderByType;
+  order?: string;
   startAt?: number;
   endAt?: number;
 };

@@ -1,17 +1,23 @@
 import { useState } from 'react';
-import { useEmailPassword } from './useEmailPassword';
 import {
-  InputObject,
-  EmailPasswordConfirmEventType,
   AuthReturnType,
   EmailPasswordConfirmDataType,
+  EmailPasswordConfirmEventType,
 } from '../types';
+import { createSpreadObject } from './createSpreadObject';
+import { useEmailPassword } from './useEmailPassword';
 
-// im not sure if this approach is good or not but i wanted to reuse already existing code
-// a thing that would make this more clear is
-// if i could export the setters for loading and error from the other hook
-// for now this should be enough
-
+/**
+ * Hook for signing up with email and password using firebase auth.
+ *
+ * @param {() => void} callback - optional callback method
+ * @returns {Array} An array of:
+ * - `loading` state;
+ * - `error` that's coming from firebase or a `null`;
+ * - `data` object with `email`, `password`, `confirmation`
+ * and onSignup objects that need to be spread
+ * in their according JSX elements
+ */
 export const useEmailPasswordConfirm = (callback?: () => void) => {
   const [
     normalLoading,
@@ -23,12 +29,7 @@ export const useEmailPasswordConfirm = (callback?: () => void) => {
   const [passwordConfirm, setPasswordConfirm] = useState('chicken');
   const [isConfirmationPhase, setIsConfirmationPhase] = useState(true);
 
-  const confirmation: InputObject = {
-    value: passwordConfirm,
-    type: 'password',
-    required: true,
-    onChange: (e: React.ChangeEvent<HTMLInputElement>) => setPasswordConfirm(e.target.value),
-  };
+  const confirmation = createSpreadObject(passwordConfirm, 'password', setPasswordConfirm);
 
   const signupAction = async (e: React.SyntheticEvent) => {
     e.preventDefault();
