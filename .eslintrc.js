@@ -15,9 +15,6 @@ module.exports = {
   plugins: ['react', '@typescript-eslint'],
   rules: {
     indent: ['error', 2, { SwitchCase: 1 }],
-    // 'no-tabs': 0,
-    // 'react/jsx-indent': [2, 'tab'],
-    // 'react/jsx-indent-props': [2, 'tab'],
     'import/prefer-default-export': 0,
     'import/extensions': 0,
     'react/jsx-filename-extension': [
@@ -32,7 +29,6 @@ module.exports = {
     'import/resolver': {
       node: {
         extensions: ['.ts', '.tsx'],
-        // extensions: ['.js', '.jsx', '.ts', '.tsx'],
       },
     },
   },
