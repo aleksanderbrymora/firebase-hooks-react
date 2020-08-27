@@ -53,6 +53,6 @@ export const useWriteFS = (writeObject: WriteData): [boolean, null | Error] => {
       });
 
     default:
-      throw new Error('You need to specify a valid operation - \'add\' or \'set\' ');
+      throw new Error('You need to specify a valid operation - \'add\' | \'set\' | \'update\' | \'delete\'| \'deleteField\'');
   }
 };
