@@ -29,7 +29,9 @@
 		"start": "tsc --watch",
 		"build": "yarn clean && tsc",
 		"lint": "eslint --ext .tsx,.ts --fix src/",
-		"clean": "rm -rf ./dist"
+		"clean": "rm -rf ./dist",
+		"docs": "typedoc --out docs/typedoc src",
+		"read-docs": "live-server docs/typedoc"
 	},
 	"dependencies": {
 		"firebase": "^7.17.2"

@@ -1,0 +1,290 @@
+<!doctype html>
+<html class="default no-js">
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title>firebase-hooks-react</title>
+	<meta name="description" content="Documentation for firebase-hooks-react">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="assets/css/main.css">
+</head>
+<body>
+<header>
+	<div class="tsd-page-toolbar">
+		<div class="container">
+			<div class="table-wrap">
+				<div class="table-cell" id="tsd-search" data-index="assets/js/search.json" data-base=".">
+					<div class="field">
+						<label for="tsd-search-field" class="tsd-widget search no-caption">Search</label>
+						<input id="tsd-search-field" type="text" />
+					</div>
+					<ul class="results">
+						<li class="state loading">Preparing search index...</li>
+						<li class="state failure">The search index is not available</li>
+					</ul>
+					<a href="index.html" class="title">firebase-hooks-react</a>
+				</div>
+				<div class="table-cell" id="tsd-widgets">
+					<div id="tsd-filter">
+						<a href="#" class="tsd-widget options no-caption" data-toggle="options">Options</a>
+						<div class="tsd-filter-group">
+							<div class="tsd-select" id="tsd-filter-visibility">
+								<span class="tsd-select-label">All</span>
+								<ul class="tsd-select-list">
+									<li data-value="public">Public</li>
+									<li data-value="protected">Public/Protected</li>
+									<li data-value="private" class="selected">All</li>
+								</ul>
+							</div>
+							<input type="checkbox" id="tsd-filter-inherited" checked />
+							<label class="tsd-widget" for="tsd-filter-inherited">Inherited</label>
+							<input type="checkbox" id="tsd-filter-externals" checked />
+							<label class="tsd-widget" for="tsd-filter-externals">Externals</label>
+							<input type="checkbox" id="tsd-filter-only-exported" />
+							<label class="tsd-widget" for="tsd-filter-only-exported">Only exported</label>
+						</div>
+					</div>
+					<a href="#" class="tsd-widget menu no-caption" data-toggle="menu">Menu</a>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="tsd-page-title">
+		<div class="container">
+			<ul class="tsd-breadcrumb">
+				<li>
+					<a href="globals.html">Globals</a>
+				</li>
+			</ul>
+			<h1>firebase-hooks-react</h1>
+		</div>
+	</div>
+</header>
+<div class="container container-main">
+	<div class="row">
+		<div class="col-8 col-content">
+			<div class="tsd-panel tsd-typography">
+				<a href="#firebase-hooks" id="firebase-hooks" style="color: inherit; text-decoration: none;">
+					<h1>Firebase hooks</h1>
+				</a>
+				<a href="#description" id="description" style="color: inherit; text-decoration: none;">
+					<h2>Description</h2>
+				</a>
+				<p>While Firebase is a great way to abstract backend interaction for all devs, I believe it could benefit from some hooks love.</p>
+				<p>Another reason why I&#39;m writing this project is to make firebase as accessible to new users as I can.
+				I recently had pretty bad experience with explaining configuration, organization and usage to few new Web Devs and I believe there is too much that is not explained in the docs explicitly, so I might as well attempt to abstract it with custom hooks.</p>
+				<a href="#get-started" id="get-started" style="color: inherit; text-decoration: none;">
+					<h2>Get started</h2>
+				</a>
+				<pre><code class="language-jsx"><span class="hljs-comment">// Add these to index.js</span>
+<span class="hljs-keyword">import</span> { FirebaseContextCreate } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;firebase-hooks&#x27;</span>; <span class="hljs-comment">// todo come up with name</span>
+<span class="hljs-keyword">import</span> React <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;react&#x27;</span>;
+<span class="hljs-keyword">import</span> ReactDOM <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;react-dom&#x27;</span>;
+<span class="hljs-keyword">import</span> App <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;./App&#x27;</span>;
+
+<span class="hljs-keyword">const</span> Firebase = FirebaseContextCreate(
+    {
+        <span class="hljs-attr">apiKey</span>: <span class="hljs-string">&#x27;api-key&#x27;</span>,
+        <span class="hljs-attr">authDomain</span>: <span class="hljs-string">&#x27;project-id.firebaseapp.com&#x27;</span>,
+        <span class="hljs-attr">databaseURL</span>: <span class="hljs-string">&#x27;https://project-id.firebaseio.com&#x27;</span>,
+        <span class="hljs-attr">projectId</span>: <span class="hljs-string">&#x27;project-id&#x27;</span>,
+        <span class="hljs-attr">storageBucket</span>: <span class="hljs-string">&#x27;project-id.appspot.com&#x27;</span>,
+        <span class="hljs-attr">messagingSenderId</span>: <span class="hljs-string">&#x27;sender-id&#x27;</span>,
+        <span class="hljs-attr">appId</span>: <span class="hljs-string">&#x27;app-id&#x27;</span>,
+        <span class="hljs-attr">measurementId</span>: <span class="hljs-string">&#x27;G-measurement-id&#x27;</span>,
+    },
+    <span class="hljs-comment">//add only what you need to this array</span>
+    [<span class="hljs-string">&#x27;firestore&#x27;</span>, <span class="hljs-string">&#x27;auth&#x27;</span>, <span class="hljs-string">&#x27;database&#x27;</span>, <span class="hljs-string">&#x27;storage&#x27;</span>],
+);
+
+ReactDOM.render(
+    <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">Firebase</span>&gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-name">App</span> /&gt;</span>
+    <span class="hljs-tag">&lt;/<span class="hljs-name">Firebase</span>&gt;</span></span>
+<span class="hljs-built_in">document</span>.getElementById(<span class="hljs-string">&#x27;root&#x27;</span>),
+);</code></pre>
+				<a href="#firestore" id="firestore" style="color: inherit; text-decoration: none;">
+					<h2>Firestore</h2>
+				</a>
+				<a href="#documentation-for-usefirestore" id="documentation-for-usefirestore" style="color: inherit; text-decoration: none;">
+					<h3><a href="./docs/firestore.md">Documentation for <code>useFirestore</code></a></h3>
+				</a>
+				<p>There are two main groups of operations: <strong>Global search</strong> and <strong>User search</strong>. They are basically the same, but the <em>User Search</em> is only searching data related to current user.</p>
+				<p>For now these two types work the same, but in the <code>path</code> variable, passed into a hook you have the ability to pass a string called <code>__user</code> (ex: <code>__user/posts</code>) which will be parsed by a hook and will input currently logged in user&#39;s id.
+				<em>Note</em> this variable is subject to change and will be defined in one place.</p>
+				<a href="#auth" id="auth" style="color: inherit; text-decoration: none;">
+					<h2>Auth</h2>
+				</a>
+				<a href="#documentation-for-useauth-and-user" id="documentation-for-useauth-and-user" style="color: inherit; text-decoration: none;">
+					<h3><a href="./docs/auth.md">Documentation for <code>useAuth</code> and <code>useR</code></a></h3>
+				</a>
+				<p><code>useAuth</code> hook expects a string of signup method user wants to use and an optional callback function, useful for redirects.
+				Hook returns always an array of loading, error and data, where data is information available from each method. In that object there are handlers for <code>onChange</code> or <code>onSubmit</code> and other abstractions so you dont have to worry about handling inputs at all. Details about each method present in auth docs.</p>
+				<p><code>useR</code> hook is a hook that returns information about the user and if hes being loaded in.</p>
+				<a href="#credits" id="credits" style="color: inherit; text-decoration: none;">
+					<h3>Credits</h3>
+				</a>
+				<ul>
+					<li><a href="https://benmcmahen.com/using-firebase-with-react-hooks/">Using firebase with react hooks</a></li>
+					<li><a href="https://www.williamkurniawan.com/blog/building-custom-react-hooks-to-fetch-data-from-firebase-firestore">Building custom React Hooks to fetch data from Firebase Firestore</a></li>
+					<li><a href="https://usehooks.com/useAuth/">useAuth hook</a></li>
+					<li><a href="https://medium.com/@prawira/react-conditional-import-conditional-css-import-110cc58e0da6">lazy loading elements</a></li>
+				</ul>
+			</div>
+		</div>
+		<div class="col-4 col-menu menu-sticky-wrap menu-highlight">
+			<nav class="tsd-navigation primary">
+				<ul>
+					<li class="globals  ">
+						<a href="globals.html"><em>Globals</em></a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/_auth_auth_types_authproviders_.html">&quot;auth/auth-<wbr>types/auth<wbr>Providers&quot;</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/_auth_auth_types_useemailpassword_.html">&quot;auth/auth-<wbr>types/use<wbr>Email<wbr>Password&quot;</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/_auth_auth_types_useemailpasswordconfirm_.html">&quot;auth/auth-<wbr>types/use<wbr>Email<wbr>Password<wbr>Confirm&quot;</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/_auth_auth_types_useproviderpopup_.html">&quot;auth/auth-<wbr>types/use<wbr>Provider<wbr>Popup&quot;</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/_auth_auth_types_usesignout_.html">&quot;auth/auth-<wbr>types/use<wbr>Signout&quot;</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/_auth_index_.html">&quot;auth/index&quot;</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/_auth_types_.html">&quot;auth/types&quot;</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/_auth_useauth_.html">&quot;auth/use<wbr>Auth&quot;</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/_auth_user_.html">&quot;auth/use<wbr>R&quot;</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/_context_createfirebasecontext_.html">&quot;context/<wbr>Create<wbr>Firebase<wbr>Context&quot;</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/_context_firebasecontext_.html">&quot;context/<wbr>Firebase<wbr>Context&quot;</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/_context_index_.html">&quot;context/index&quot;</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/_firestore_handleerror_.html">&quot;firestore/handle<wbr>Error&quot;</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/_firestore_index_.html">&quot;firestore/index&quot;</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/_firestore_useaddfs_.html">&quot;firestore/use<wbr>AddFS&quot;</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/_firestore_usedeletefs_.html">&quot;firestore/use<wbr>DeleteFS&quot;</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/_firestore_usedeletefieldfs_.html">&quot;firestore/use<wbr>Delete<wbr>FieldFS&quot;</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/_firestore_usequery_.html">&quot;firestore/use<wbr>Query&quot;</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/_firestore_usereadcollection_.html">&quot;firestore/use<wbr>Read<wbr>Collection&quot;</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/_firestore_usereaddoc_.html">&quot;firestore/use<wbr>Read<wbr>Doc&quot;</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/_firestore_usereadfs_.html">&quot;firestore/use<wbr>ReadFS&quot;</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/_firestore_usesetfs_.html">&quot;firestore/use<wbr>SetFS&quot;</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/_firestore_useupdatefs_.html">&quot;firestore/use<wbr>UpdateFS&quot;</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/_firestore_usewritefs_.html">&quot;firestore/use<wbr>WriteFS&quot;</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/_firestore_write_types_.html">&quot;firestore/write-<wbr>types&quot;</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/_index_.html">&quot;index&quot;</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/_types_firebase_config_.html">&quot;types/firebase/config&quot;</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/_types_firebase_context_.html">&quot;types/firebase/context&quot;</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/_types_firebase_index_.html">&quot;types/firebase/index&quot;</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/_types_firebase_tech_array_.html">&quot;types/firebase/tech-<wbr>array&quot;</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/_types_firestore_data_.html">&quot;types/firestore/data&quot;</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/_types_firestore_index_.html">&quot;types/firestore/index&quot;</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/_types_firestore_params_.html">&quot;types/firestore/params&quot;</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/_types_user_type_.html">&quot;types/user-<wbr>type&quot;</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/_utils_addtimestamp_.html">&quot;utils/add<wbr>Timestamp&quot;</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/_utils_converttowithuser_.html">&quot;utils/convert<wbr>ToWith<wbr>User&quot;</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/_utils_createdummypost_.html">&quot;utils/create<wbr>Dummy<wbr>Post&quot;</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/_utils_firebasedate_.html">&quot;utils/firebase<wbr>Date&quot;</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/_utils_isempty_.html">&quot;utils/is<wbr>Empty&quot;</a>
+					</li>
+				</ul>
+			</nav>
+			<nav class="tsd-navigation secondary menu-sticky">
+				<ul class="before-current">
+				</ul>
+			</nav>
+		</div>
+	</div>
+</div>
+<footer class="with-border-bottom">
+	<div class="container">
+		<h2>Legend</h2>
+		<div class="tsd-legend-group">
+			<ul class="tsd-legend">
+				<li class="tsd-kind-variable"><span class="tsd-kind-icon">Variable</span></li>
+				<li class="tsd-kind-function"><span class="tsd-kind-icon">Function</span></li>
+				<li class="tsd-kind-function tsd-has-type-parameter"><span class="tsd-kind-icon">Function with type parameter</span></li>
+				<li class="tsd-kind-type-alias"><span class="tsd-kind-icon">Type alias</span></li>
+				<li class="tsd-kind-type-alias tsd-has-type-parameter"><span class="tsd-kind-icon">Type alias with type parameter</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-interface"><span class="tsd-kind-icon">Interface</span></li>
+			</ul>
+		</div>
+	</div>
+</footer>
+<div class="container tsd-generator">
+	<p>Generated using <a href="https://typedoc.org/" target="_blank">TypeDoc</a></p>
+</div>
+<div class="overlay"></div>
+<script src="assets/js/main.js"></script>
+</body>
+</html>

@@ -2,3 +2,4 @@
 export * from './context/CreateFirebaseContext';
 export * from './firestore';
 export * from './auth';
+export { createDate } from './utils/firebaseDate';
