@@ -20,22 +20,15 @@ import { isEmpty } from '../utils/isEmpty';
  * pointing to which fields in a specified doc should be updated
  * @returns an array of `loading` boolean and `error` object which is either `null` or `Error`
  */
-export const useWriteFS = (writeObject: WriteData): [boolean, null | Error] => {
-  const {
-    operation,
-    collection,
-    doc,
-    merge,
-    callback,
-    data,
-    fields,
-  } = writeObject;
+export const useWriteFS = (writeObject: WriteData): () => Promise<void> => {
+  const { operation, collection } = writeObject;
+  // Handling if collection is not passed in.
+  if (!collection) throw new Error('You need to specify the collection to set in');
+  // Wrong operation is handled by the `default` in the switch
+  // if (isEmpty(data)) throw new Error('You need to specify the data to update to');
 
   switch (operation) {
     case 'set':
-      if (!collection) throw new Error('You need to specify the collection to set in');
-      if (!doc) throw new Error('You need to specify the document you want to set');
-      if (isEmpty(data)) throw new Error('You need to specify the data to update to');
       return useSetFS({
         collection, doc, data, callback, merge,
       });

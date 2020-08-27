@@ -35,9 +35,4 @@ export interface AddData {
 export interface WriteData {
   operation: 'add' | 'set' | 'update' | 'deleteField' | 'delete'
   collection: string;
-  doc: string;
-  data: object;
-  merge?: boolean;
-  callback?: () => void;
-  fields?: string[]
 }
