@@ -6,6 +6,20 @@ import { useDeleteFS } from './useDeleteFS';
 import { useDeleteFieldFS } from './useDeleteFieldFS';
 import { isEmpty } from '../utils/isEmpty';
 
+/**
+ * Hook to mutate data in firestore, it takes an object with these params
+ * @param operation - is a string that indicates the action.
+ * Can be these only: 'add' | 'set' | 'update' | 'deleteField' | 'delete'
+ * @param collection - a string pointing to the collection in firestore
+ * @param doc - a string pointing to a document (uid) in the previously specified collection
+ * @param merge - boolean used only for setting a document indicating if firebase should
+ * preserve previously set data on the document or overwrite it with passed in object
+ * @param callback - an optional function that will be called when the operation finished
+ * @param data - an object that contains the data thats meant to be saved to the firestore
+ * @param fields - array of strings only used for `deleteField` action,
+ * pointing to which fields in a specified doc should be updated
+ * @returns an array of `loading` boolean and `error` object which is either `null` or `Error`
+ */
 export const useWriteFS = (writeObject: WriteData): [boolean, null | Error] => {
   const {
     operation,
