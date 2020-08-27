@@ -1,40 +1,35 @@
 import { useState, useEffect } from 'react';
 import { useFire } from '../context';
-import { SetData } from './write-types';
+import { UpdateData } from './write-types';
 import { timestamp } from '../utils/addTimestamp';
 
 /**
- * Hook for setting the data. Takes an object with these params:
+ * Hook for updating the data. Takes an object with these params:
  * @param collection - string pointing to a collection
  * @param doc - string pointing to a document to edit
- * @param data - an object that will be set in the firestore
- * @param merge - boolean specifying if set should overwrite or merge
+ * @param data - an object with a field to update in the firestore
  * @param callback - optional function to be called back after success
  * @returns array with `loading` state, `error` object
  */
-export const useSetFS = (toSetData: SetData) => {
+export const useUpdateFS = (toSetData: UpdateData) => {
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<null | Error>(null);
   const { firestore } = useFire();
 
   const {
-    collection, doc, data, merge, callback,
+    collection, doc, data, callback,
   } = toSetData;
-
-  // storing the timestamp so its the same in the db
-  const ts = timestamp();
 
   const timestampedData = {
     ...data,
-    updatedAt: ts,
-    createdAt: ts,
+    updatedAt: timestamp(),
   };
 
   useEffect(() => {
     const ref = firestore!.collection(collection).doc(doc);
     (async () => {
       try {
-        await ref.set(timestampedData, { merge });
+        await ref.update(timestampedData);
         setLoading(false);
         if (callback) callback();
       } catch (e) {
