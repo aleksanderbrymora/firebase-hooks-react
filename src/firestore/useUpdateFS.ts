@@ -1,7 +1,7 @@
-import { useState, useEffect } from 'react';
 import { useFire } from '../context';
-import { UpdateData } from './write-types';
 import { timestamp } from '../utils/addTimestamp';
+import { ReturnWithDoc } from './SetReturn';
+import { isEmpty } from '../utils/isEmpty';
 
 /**
  * Hook for updating the data. Takes an object with these params:
@@ -11,35 +11,33 @@ import { timestamp } from '../utils/addTimestamp';
  * @param callback - optional function to be called back after success
  * @returns array with `loading` state, `error` object
  */
-export const useUpdateFS = (toUpdateData: UpdateData) => {
-  const [loading, setLoading] = useState<boolean>(false);
-  const [error, setError] = useState<null | Error>(null);
+export const useUpdateFS = (collection: string): ReturnWithDoc => {
   const { firestore } = useFire();
 
-  const {
-    collection, doc, data, callback,
-  } = toUpdateData;
+  /**
+   * Function used to set a document in the firestore
+   * @param data - an object that will be set in the firestore
+   * @param doc - string pointing to a document to edit
+   * @returns a promise that resolves to void and will set an object in firestore
+   */
+  // this `| undefined` is really killing me but i don't know how to deal with it
+  const updateFunction = (data: object, doc: string | undefined) => {
+    if (isEmpty(data)) throw new Error('You need to specify the data to update to');
+    if (!doc) throw new Error('You need to pass an uid of the document you want to update');
 
-  const timestampedData = {
-    ...data,
-    updatedAt: timestamp(),
+    const promise = new Promise<void>((resolve, reject) => {
+      const timestampedData = {
+        ...data,
+        updatedAt: timestamp(),
+      };
+      const ref = firestore!.collection(collection).doc(doc);
+
+      ref.update(timestampedData)
+        .then(resolve)
+        .catch((e) => reject(e));
+    });
+    return promise;
   };
 
-  useEffect(() => {
-    const ref = firestore!.collection(collection).doc(doc);
-    (async () => {
-      try {
-        await ref.update(timestampedData);
-        setLoading(false);
-        if (callback) callback();
-      } catch (e) {
-        setError(e);
-        setLoading(false);
-      }
-    })();
-  });
-
-  const returnObject: [boolean, null | Error] = [loading, error];
-
-  return returnObject;
+  return updateFunction;
 };

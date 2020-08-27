@@ -1,50 +1,50 @@
-import { useState, useEffect } from 'react';
 import { useFire } from '../context';
-import { SetData } from './write-types';
 import { timestamp } from '../utils/addTimestamp';
+import { isEmpty } from '../utils/isEmpty';
+import { ReturnWithDoc } from './SetReturn';
 
 /**
  * Hook for setting the data. Takes an object with these params:
  * @param collection - string pointing to a collection
- * @param doc - string pointing to a document to edit
- * @param data - an object that will be set in the firestore
  * @param merge - boolean specifying if set should overwrite or merge
  * @param callback - optional function to be called back after success
- * @returns array with `loading` state, `error` object
+ * @returns a function that returns returns a promise with no return value after resolution
  */
-export const useSetFS = (toSetData: SetData) => {
-  const [loading, setLoading] = useState<boolean>(false);
-  const [error, setError] = useState<null | Error>(null);
+export const useSetFS = (
+  collection: string,
+  options: {merge: boolean} | undefined,
+): ReturnWithDoc => {
   const { firestore } = useFire();
 
-  const {
-    collection, doc, data, merge, callback,
-  } = toSetData;
+  /**
+   * Function used to set a document in the firestore
+   * @param data - an object that will be set in the firestore
+   * @param doc - string pointing to a document to edit
+   * @returns a promise that resolves to void and will set an object in firestore
+   */
+  // this `| undefined` is really killing me but i don't know how to deal with it
+  const setFunction = (data: object, doc: string | undefined) => {
+    if (isEmpty(data)) throw new Error('You need to specify the data to update to');
+    if (!doc) throw new Error('You need to pass an uid of the document you want to update');
 
-  // storing the timestamp so its the same in the db
-  const ts = timestamp();
-
-  const timestampedData = {
-    ...data,
-    updatedAt: ts,
-    createdAt: ts,
+    const promise = new Promise<void>((resolve, reject) => {
+      const timestampedData = {
+        ...data,
+        createdAt: timestamp(),
+      };
+      const ref = firestore!.collection(collection).doc(doc);
+      if (typeof options === 'object' && 'merge' in options) {
+        ref.set(timestampedData, { merge: options ? options.merge : true })
+          .then(resolve)
+          .catch((e) => reject(e));
+      } else {
+        ref.set(timestampedData)
+          .then(resolve)
+          .catch((e) => reject(e));
+      }
+    });
+    return promise;
   };
 
-  useEffect(() => {
-    const ref = firestore!.collection(collection).doc(doc);
-    (async () => {
-      try {
-        await ref.set(timestampedData, { merge });
-        setLoading(false);
-        if (callback) callback();
-      } catch (e) {
-        setError(e);
-        setLoading(false);
-      }
-    })();
-  });
-
-  const returnObject: [boolean, null | Error] = [loading, error];
-
-  return returnObject;
+  return setFunction;
 };

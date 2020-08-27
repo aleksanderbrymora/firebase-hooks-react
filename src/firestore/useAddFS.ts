@@ -1,46 +1,38 @@
-import { useState, useEffect } from 'react';
 import { useFire } from '../context';
-import { AddData } from './write-types';
 import { timestamp } from '../utils/addTimestamp';
+import { isEmpty } from '../utils/isEmpty';
+
+type SetReturn = (data: object) => Promise<void>
 
 /**
  * Hook for adding the data. Takes an object with these params:
  * @param collection - string pointing to a collection
- * @param data - an object that will be added to the firestore
- * @param callback - optional function to be called back after success that has id as a parm
- * @returns array with `loading` state, `error` object
  */
-export const useAddFS = (toAddData: AddData) => {
-  const [loading, setLoading] = useState<boolean>(false);
-  const [error, setError] = useState<null | Error>(null);
+export const useAddFS = (collection: string): SetReturn => {
   const { firestore } = useFire();
 
-  const { collection, data, callback } = toAddData;
+  /**
+   * Function used to set a document in the firestore
+   * @param data - an object that will be set in the firestore
+   * @returns a promise that resolves to void and will add an object to firestore
+   */
+  const addFunction = (data: object) => {
+    if (isEmpty(data)) throw new Error('You need to specify the data to update to');
 
-  // storing the timestamp so its the same in the db
-  const ts = timestamp();
-
-  const timestampedData = {
-    ...data,
-    updatedAt: ts,
-    createdAt: ts,
+    const promise = new Promise<void>((resolve, reject) => {
+      const ts = timestamp();
+      const timestampedData = {
+        ...data,
+        updatedAt: ts,
+        createdAt: ts,
+      };
+      const ref = firestore!.collection(collection);
+      ref.add(timestampedData)
+        .then(() => resolve())
+        .catch((e) => reject(e));
+    });
+    return promise;
   };
 
-  useEffect(() => {
-    const ref = firestore!.collection(collection);
-    (async () => {
-      try {
-        const res = await ref.add(timestampedData);
-        setLoading(false);
-        if (callback) callback(res.id);
-      } catch (e) {
-        setError(e);
-        setLoading(false);
-      }
-    })();
-  });
-
-  const returnObject: [boolean, null | Error] = [loading, error];
-
-  return returnObject;
+  return addFunction;
 };

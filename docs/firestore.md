@@ -1,6 +1,6 @@
 # Write
 
-All of the mutations get timestamps attached to them by default so you dont have to worry about them
+All of the mutations get timestamps attached to them by default so you don't have to worry about them
 
 ## Set
 
@@ -26,7 +26,7 @@ handleSubmit = async () => {
 	try {
 		// need to await the operation to resolve successfully
 		// function doesn't return anything so no need to capture the outcome
-		await setCity('uidOfTheDocYouWantToChangeOrCreate', {data: 'that', you: 'want', to: 'save'})
+		await setCity({data: 'that', you: 'want', to: 'save'}, 'uidOfTheDocYouWantToChangeOrCreate')
 		// after its done you can call any other function like redirect to other path:
 		props.history.push('/')
 	} catch (e) {
@@ -77,7 +77,7 @@ handleSubmit = async () => {
 		// second parameter is an object of existing values you want to update
 		// consult with these docs on what you can actually do with that as there are cool things like increase by one
 		// https://firebase.google.com/docs/firestore/manage-data/add-data#update-data
-		await setCity('uidOfTheDocYouWantToChangeOrCreate', {data: 'that', you: 'want', to: 'save'})
+		await updateCity({data: 'that', you: 'want', to: 'save'}, 'uidOfTheDocYouWantToChangeOrCreate')
 		// after its done you can call any other function like redirect to other path:
 		props.history.push('/')
 	} catch (e) {

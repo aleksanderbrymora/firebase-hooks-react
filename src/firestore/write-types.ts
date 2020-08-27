@@ -32,7 +32,4 @@ export interface AddData {
   callback?: (id: string) => void
 }
 
-export interface WriteData {
-  operation: 'add' | 'set' | 'update' | 'deleteField' | 'delete'
-  collection: string;
-}
+export type WriteOperation = 'add' | 'set' | 'update' | 'deleteField' | 'delete'

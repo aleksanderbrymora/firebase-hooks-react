@@ -1,10 +1,9 @@
-import { useSetFS } from './useSetFS';
-import { WriteData } from './write-types';
 import { useAddFS } from './useAddFS';
-import { useUpdateFS } from './useUpdateFS';
-import { useDeleteFS } from './useDeleteFS';
 import { useDeleteFieldFS } from './useDeleteFieldFS';
-import { isEmpty } from '../utils/isEmpty';
+import { useDeleteFS } from './useDeleteFS';
+import { useSetFS } from './useSetFS';
+import { useUpdateFS } from './useUpdateFS';
+import { WriteOperation } from './write-types';
 
 /**
  * Hook to mutate data in firestore, it takes an object with these params
@@ -20,39 +19,33 @@ import { isEmpty } from '../utils/isEmpty';
  * pointing to which fields in a specified doc should be updated
  * @returns an array of `loading` boolean and `error` object which is either `null` or `Error`
  */
-export const useWriteFS = (writeObject: WriteData): () => Promise<void> => {
-  const { operation, collection } = writeObject;
+export const useWriteFS = (
+  operation: WriteOperation,
+  collection: string,
+  options: object | string[] | undefined): (
+  data: object,
+  doc?: string,
+) => Promise<void> => {
   // Handling if collection is not passed in.
   if (!collection) throw new Error('You need to specify the collection to set in');
   // Wrong operation is handled by the `default` in the switch
-  // if (isEmpty(data)) throw new Error('You need to specify the data to update to');
 
   switch (operation) {
     case 'set':
-      return useSetFS({
-        collection, doc, data, callback, merge,
-      });
+      // not sure if typecasting fixed it but i cant be bothered anymore
+      return useSetFS(collection, options as {merge: boolean} | undefined);
 
     case 'add':
-      if (!collection) throw new Error('You need to specify the collection to add to');
-      if (isEmpty(data)) throw new Error('You need to specify the data to update to');
-      return useAddFS({ collection, callback, data });
+      return useAddFS(collection);
 
     case 'update':
-      if (!collection) throw new Error('You need to specify the in which collection you want to do an update');
-      if (!doc) throw new Error('You need to specify the document you want to set');
-      if (isEmpty(data)) throw new Error('You need to specify the data to update to');
-      return useUpdateFS({
-        collection, callback, data, doc,
-      });
+      return useUpdateFS(collection);
 
     case 'delete':
-      if (!collection) throw new Error('You need to specify the in which collection you want to delete a document');
       if (!doc) throw new Error('You need to specify the document you want to delete');
       return useDeleteFS({ collection, doc, callback });
 
     case 'deleteField':
-      if (!collection) throw new Error('You need to specify the in which collection you want to edit the document');
       if (!doc) throw new Error('You need to specify the document you want to delete a field in');
       if (!fields) throw new Error('You need to specify at least one field you want to delete');
       return useDeleteFieldFS({
