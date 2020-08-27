@@ -4,6 +4,7 @@ import { useAddFS } from './useAddFS';
 import { useUpdateFS } from './useUpdateFS';
 import { useDeleteFS } from './useDeleteFS';
 import { useDeleteFieldFS } from './useDeleteFieldFS';
+import { isEmpty } from '../utils/isEmpty';
 
 export const useWriteFS = (writeObject: WriteData): [boolean, null | Error] => {
   const {
@@ -20,20 +21,20 @@ export const useWriteFS = (writeObject: WriteData): [boolean, null | Error] => {
     case 'set':
       if (!collection) throw new Error('You need to specify the collection to set in');
       if (!doc) throw new Error('You need to specify the document you want to set');
-      if (Object.keys(data).length === 0 && data.constructor === Object) throw new Error('You need to specify the data to update to');
+      if (isEmpty(data)) throw new Error('You need to specify the data to update to');
       return useSetFS({
         collection, doc, data, callback, merge,
       });
 
     case 'add':
       if (!collection) throw new Error('You need to specify the collection to add to');
-      if (Object.keys(data).length === 0 && data.constructor === Object) throw new Error('You need to specify the data to update to');
+      if (isEmpty(data)) throw new Error('You need to specify the data to update to');
       return useAddFS({ collection, callback, data });
 
     case 'update':
       if (!collection) throw new Error('You need to specify the in which collection you want to do an update');
       if (!doc) throw new Error('You need to specify the document you want to set');
-      if (Object.keys(data).length === 0 && data.constructor === Object) throw new Error('You need to specify the data to update to');
+      if (isEmpty(data)) throw new Error('You need to specify the data to update to');
       return useUpdateFS({
         collection, callback, data, doc,
       });
