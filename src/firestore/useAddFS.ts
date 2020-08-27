@@ -10,12 +10,12 @@ import { timestamp } from '../utils/addTimestamp';
  * @param callback - optional function to be called back after success that has id as a parm
  * @returns array with `loading` state, `error` object
  */
-export const useAddFS = (toSetData: AddData) => {
+export const useAddFS = (toAddData: AddData) => {
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<null | Error>(null);
   const { firestore } = useFire();
 
-  const { collection, data, callback } = toSetData;
+  const { collection, data, callback } = toAddData;
 
   // storing the timestamp so its the same in the db
   const ts = timestamp();

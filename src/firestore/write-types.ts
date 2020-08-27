@@ -13,6 +13,19 @@ export interface UpdateData {
   callback?: () => void;
 }
 
+export interface DeleteDocData {
+  collection: string;
+  doc: string;
+  callback?: () => void;
+}
+
+export interface DeleteFieldData {
+  collection: string;
+  doc: string;
+  fields: string[];
+  callback?: () => void;
+}
+
 export interface AddData {
   collection: string
   data: object
@@ -20,10 +33,11 @@ export interface AddData {
 }
 
 export interface WriteData {
-  operation: 'add' | 'set' | 'update'
+  operation: 'add' | 'set' | 'update' | 'deleteField' | 'delete'
   collection: string;
   doc: string;
   data: object;
   merge?: boolean;
   callback?: () => void;
+  fields?: string[]
 }
