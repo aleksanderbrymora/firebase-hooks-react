@@ -1,7 +1,6 @@
 import { useAddFS } from './useAddFS';
 import { useDeleteFieldFS } from './useDeleteFieldFS';
 import { useDeleteFS } from './useDeleteFS';
-import { useSetFS } from './setIn';
 import { useUpdateFS } from './useUpdateFS';
 import { WriteOperation } from '../write-types';
 
