@@ -1,3 +1,3 @@
-export { useWriteFS } from './useWriteFS';
+export { useWriteFS } from './write/useWriteFS';
 export * from './useReadCollection';
-export * from './useReadFS';
+export * from './read/useReadFS';

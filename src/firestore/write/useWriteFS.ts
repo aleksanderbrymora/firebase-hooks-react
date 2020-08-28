@@ -1,9 +1,9 @@
 import { useAddFS } from './useAddFS';
 import { useDeleteFieldFS } from './useDeleteFieldFS';
 import { useDeleteFS } from './useDeleteFS';
-import { useSetFS } from './useSetFS';
+import { useSetFS } from './setIn';
 import { useUpdateFS } from './useUpdateFS';
-import { WriteOperation } from './write-types';
+import { WriteOperation } from '../write-types';
 
 /**
  * Hook to mutate data in firestore, it takes an object with these params
@@ -22,9 +22,9 @@ import { WriteOperation } from './write-types';
 export const useWriteFS = (
   operation: WriteOperation,
   collection: string,
-  options: object | string[] | undefined): (
-  data: object,
-  doc?: string,
+  options: object | string[] | undefined): <First, Second>(
+  data: First,
+  doc: Second,
 ) => Promise<void> => {
   // Handling if collection is not passed in.
   if (!collection) throw new Error('You need to specify the collection to set in');
@@ -42,8 +42,7 @@ export const useWriteFS = (
       return useUpdateFS(collection);
 
     case 'delete':
-      if (!doc) throw new Error('You need to specify the document you want to delete');
-      return useDeleteFS({ collection, doc, callback });
+      return useDeleteFS(collection);
 
     case 'deleteField':
       if (!doc) throw new Error('You need to specify the document you want to delete a field in');

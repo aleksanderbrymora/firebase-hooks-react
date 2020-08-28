@@ -1,14 +1,14 @@
-import { useR } from '../auth/useR';
-import { useFire } from '../context';
+import { useR } from '../../auth/useR';
+import { useFire } from '../../context';
 import {
   CollectionData,
   DocumentData,
   FirestoreQueryType,
   InferDocType,
   QueryTypes,
-} from '../types/firestore';
-import { handleUser } from '../utils/convertToWithUser';
-import handleError from './handleError';
+} from '../../types/firestore';
+import { handleUser } from '../../utils/convertToWithUser';
+import handleError from '../handleError';
 import { useQuery } from './useQuery';
 import { useReadCollection } from './useReadCollection';
 import { useReadDoc } from './useReadDoc';

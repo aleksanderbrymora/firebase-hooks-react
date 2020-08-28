@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react';
-import { useFire } from '../context';
-import { FirestoreQueryType, queryType } from '../types/firestore/params';
-import { CollectionData } from '../types/firestore/data';
+import { FirestoreQueryType, CollectionData, queryType } from '../../types/firestore';
+import { useFire } from '../../context';
 
 export const useQuery = (q: FirestoreQueryType): CollectionData => {
   const [loading, setLoading] = useState<boolean>(false);

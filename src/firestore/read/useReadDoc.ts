@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react';
-import { useFire } from '../context';
-import handleNoImport from './handleError';
-import { DocumentData } from '../types/firestore/data';
+import { DocumentData } from '../../types/firestore';
+import { useFire } from '../../context';
 
 export const useReadDoc = (path: string, doc: string): DocumentData => {
   const [data, setData] = useState<firebase.firestore.DocumentData>([]);
@@ -10,8 +9,7 @@ export const useReadDoc = (path: string, doc: string): DocumentData => {
   const { firestore } = useFire();
 
   useEffect(() => {
-    // this probably needs to be rethought as im probably not handling the error enough
-    handleNoImport(firestore);
+    if (!firestore) throw new Error("You haven't imported the firestore module when initializing your app");
     (async () => {
       setLoading(true);
       try {

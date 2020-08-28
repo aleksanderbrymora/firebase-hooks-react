@@ -1,28 +1,31 @@
 import { useState, useEffect } from 'react';
-import { useFire } from '../context';
-import { DeleteDocData } from './write-types';
+import firebase from 'firebase/app';
+import { DeleteFieldData } from '../write-types';
+import { useFire } from '../../context';
 
 /**
- * Hook for deleting a document. Takes an object with these params:
+ * Hook for deleting a field in a doc. Takes an object with these params:
  * @param collection - string pointing to a collection
  * @param doc - string pointing to a document to edit
  * @param callback - optional function to be called back after success
  * @returns array with `loading` state, `error` object
  */
-export const useDeleteFS = (toDeleteData: DeleteDocData) => {
+export const useDeleteFieldFS = (toDeleteData: DeleteFieldData) => {
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<null | Error>(null);
   const { firestore } = useFire();
 
   const {
-    collection, doc, callback,
+    collection, doc, callback, fields,
   } = toDeleteData;
 
   useEffect(() => {
     const ref = firestore!.collection(collection).doc(doc);
     (async () => {
       try {
-        await ref.delete();
+        await Promise.all(fields.map((f: string) => ref.update({
+          [f]: firebase.firestore.FieldValue.delete(),
+        })));
         setLoading(false);
         if (callback) callback();
       } catch (e) {

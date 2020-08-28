@@ -100,7 +100,7 @@ handleSubmit = async () => {
 	try {
 		// we need to know what document you want to delete - we do that by passing its id as first arg
 		// It doesnt return anything
-		await setCity('uidOfTheDocYouWantToChangeOrCreate')
+		await deleteCity('uidOfTheDocYouWantToChangeOrCreate')
 		// after its done you can call any other function like redirect to other path:
 		props.history.push('/')
 	} catch (e) {

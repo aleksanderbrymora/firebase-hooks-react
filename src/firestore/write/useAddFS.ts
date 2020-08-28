@@ -1,14 +1,14 @@
-import { useFire } from '../context';
-import { timestamp } from '../utils/addTimestamp';
-import { isEmpty } from '../utils/isEmpty';
-
-type SetReturn = (data: object) => Promise<void>
+import { useFire } from '../../context';
+import { timestamp } from '../../utils/addTimestamp';
+import { isEmpty } from '../../utils/isEmpty';
+import { ReturnWithoutDoc } from '../SetReturn';
 
 /**
  * Hook for adding the data. Takes an object with these params:
  * @param collection - string pointing to a collection
+ * @returns a promise that resolves to void and will add an object to the firestore
  */
-export const useAddFS = (collection: string): SetReturn => {
+export const useAddFS = (collection: string): ReturnWithoutDoc => {
   const { firestore } = useFire();
 
   /**

@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
-import { useFire } from '../context';
-import { CollectionData } from '../types/firestore/data';
+import { CollectionData } from '../../types/firestore';
+import { useFire } from '../../context';
 
 export const useReadCollection = (path: string): CollectionData => {
   const [data, setData] = useState<CollectionData>([true, null, []]);
