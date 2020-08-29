@@ -1,14 +1,13 @@
-import { useR } from '../auth/useR';
-import { useFire } from '../context';
+import { useFire } from '../../context';
 import {
   CollectionData,
   DocumentData,
   FirestoreQueryType,
   InferDocType,
   QueryTypes,
-} from '../types/firestore';
-import { handleUser } from '../utils/convertToWithUser';
-import handleError from './handleError';
+} from '../../types/firestore';
+import { handleUser } from '../../utils/convertToWithUser';
+import handleError from '../handleError';
 import { useQuery } from './useQuery';
 import { useReadCollection } from './useReadCollection';
 import { useReadDoc } from './useReadDoc';
@@ -32,8 +31,7 @@ export const useReadFS = <QueryType extends QueryTypes>(
   handleError(firestore); // handle if not imported
 
   // Checking if query has user in it and replacing it if needed
-  const { user } = useR();
-  const withUserQuery = handleUser(query, user) as QueryType; // not sure if that actually fixed it
+  const withUserQuery = handleUser(query) as QueryType; // not sure if that actually fixed it
 
   if (typeof withUserQuery === 'string') {
     return typeof doc === 'string'

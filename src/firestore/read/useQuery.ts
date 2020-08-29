@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react';
-import { useFire } from '../context';
-import { FirestoreQueryType, queryType } from '../types/firestore/params';
-import { CollectionData } from '../types/firestore/data';
+import { FirestoreQueryType, CollectionData, queryType } from '../../types/firestore';
+import { useFire } from '../../context';
 
 /**
  * Hook that takes an object with compound query and filters/limits the data from the firestore

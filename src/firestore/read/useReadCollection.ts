@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
-import { useFire } from '../context';
-import { CollectionData } from '../types/firestore/data';
+import { CollectionData } from '../../types/firestore';
+import { useFire } from '../../context';
 
 /**
  * Hook used for reading the whole collection in the firestore database

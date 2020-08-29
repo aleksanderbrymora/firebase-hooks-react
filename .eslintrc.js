@@ -24,6 +24,7 @@ module.exports = {
     'react/prop-types': 0,
     'no-unused-vars': 'off',
     '@typescript-eslint/no-unused-vars': ['error'],
+    'import/no-unresolved': 0,
   },
   settings: {
     'import/resolver': {
