@@ -3,6 +3,9 @@ import { useState } from 'react';
 import { useFire } from '../../context';
 import { timestamp } from '../../utils/addTimestamp';
 
+type UseDeleteFieldType = [boolean, null | Error, DeleteFieldsFunction]
+type DeleteFieldsFunction = (doc: string, fields: string[]) => void
+
 /**
  * Hook for deleting a field in a doc. Takes an object with these params:
  * @param collection - string pointing to a collection
@@ -11,7 +14,7 @@ import { timestamp } from '../../utils/addTimestamp';
  * - `error` null or Error,
  * - `deleteFieldsFunction` used to delete a fields in a document
  */
-export const useDeleteFields = (collection: string) => {
+export const useDeleteFields = (collection: string): UseDeleteFieldType => {
   const { firestore } = useFire();
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<null | Error>(null);

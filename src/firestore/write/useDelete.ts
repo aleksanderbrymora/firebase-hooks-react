@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useFire } from '../../context';
 
 type UseDeleteType = [boolean, null | Error, DeleteFunction]
-type DeleteFunction = (doc: string, data: object) => void
+type DeleteFunction = (doc: string) => void
 
 /**
  * Hook for deleting a document. Takes an object with these params:
@@ -13,7 +13,7 @@ type DeleteFunction = (doc: string, data: object) => void
  * - `deleteFunction` used to set items in firestore
  */
 
-export const useDeleteFS = (collection: string): UseDeleteType => {
+export const useDelete = (collection: string): UseDeleteType => {
   const { firestore } = useFire();
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<null | Error>(null);
