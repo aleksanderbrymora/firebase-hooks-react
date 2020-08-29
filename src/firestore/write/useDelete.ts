@@ -24,6 +24,7 @@ export const useDelete = (collection: string): UseDeleteType => {
    */
   const deleteFunction = (doc: string): void => {
     setLoading(true);
+    setError(null);
     if (!doc) {
       setError(new Error('You need to pass an uid of the document you want to delete'));
       setLoading(false);

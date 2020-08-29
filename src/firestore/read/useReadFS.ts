@@ -13,7 +13,7 @@ import { useQuery } from './useQuery';
 import { useReadCollection } from './useReadCollection';
 import { useReadDoc } from './useReadDoc';
 
-export const useReadFS = <QueryType extends QueryTypes>(
+export const useRead = <QueryType extends QueryTypes>(
   query: QueryType,
   doc?: InferDocType<QueryType>,
   // Todo this needs to be made type-safe with `inferReturnType`
@@ -23,8 +23,7 @@ export const useReadFS = <QueryType extends QueryTypes>(
   handleError(firestore); // handle if not imported
 
   // Checking if query has user in it and replacing it if needed
-  const { user } = useR();
-  const withUserQuery = handleUser(query, user) as QueryType; // not sure if that actually fixed it
+  const withUserQuery = handleUser(query) as QueryType; // not sure if that actually fixed it
 
   // There are 3 parts to this hook:
   // - collection string - useReadCollection => array of document objects

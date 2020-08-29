@@ -26,6 +26,7 @@ export const useUpdate = (collection: string): UseUpdateType => {
    */
   const updateFunction = (doc: string, data: object): void => {
     setLoading(true);
+    setError(null);
     if (isEmpty(data)) {
       setError(new Error('You need to specify the data you want to set'));
       setLoading(false);

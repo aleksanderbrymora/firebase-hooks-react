@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useFire } from '../../context';
 import { timestamp } from '../../utils/addTimestamp';
 import { isEmpty } from '../../utils/isEmpty';
+import { convertToWithUser } from '../../utils/convertToWithUser';
 
 type UseAddType = [boolean, null | Error, AddFunction]
 type AddFunction = (data: object) => void
@@ -17,6 +18,9 @@ export const useAdd = (collection: string): UseAddType => {
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<null | Error>(null);
 
+  // converting collection to contain user id if `__user` was passed in
+  const withUserCollection = convertToWithUser(collection);
+
   /**
    * Function used to set a document in the firestore
    * @param data - an object that will be set in the firestore
@@ -27,6 +31,7 @@ export const useAdd = (collection: string): UseAddType => {
    */
   const addFunction = (data: object) => {
     setLoading(true);
+    setError(null);
     if (isEmpty(data)) {
       setError(new Error('You need to specify the data you want to add'));
       setLoading(false);
@@ -42,7 +47,7 @@ export const useAdd = (collection: string): UseAddType => {
       };
 
       (async () => {
-        const ref = firestore!.collection(collection);
+        const ref = firestore!.collection(withUserCollection);
         try {
           await ref.add(timestampedData);
           setLoading(false);

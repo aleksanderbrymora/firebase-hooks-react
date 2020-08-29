@@ -1,134 +1,191 @@
 # Write
 
+Writing to the Firestore is simple too! All you need to do is import a hook that you want to use and initialize it with a string pointing to the collection you'll do the operation on.
+You'll always get an array of:
+- `loading` state, that indicates if the process is underway. Useful for disabling a button after submission or showing a spinner.
+- `error`  which by default is `null`, but when there is a problem with be populated with an error message created by firebase
+- `function` that does the action that you requested, by calling chosen hook
+
+All of the hooks take `collection` string as a parameter. Have a look at the examples below for more in detail information about that, and occasional extra parameters.
+
 All of the mutations get timestamps attached to them by default so you don't have to worry about them
 
-## Set
+Also all of the mutation hooks support passing in a string of `__user` to indicate that you want to replace it with currently logged in user id. [Read more about how that works here](./other.md)
+
+## `useSet`
+
+Use when you have an id of thing you want to change or if you want to create an item with given id.
+
+`useSet` takes two arguments. Besides, as always, a `collection` string, it also takes an optional `merge` boolean (default `false`) that specifies if you want to keep previous values or overwrite the whole document with passed in object.
+
+The `setFunction` it returns takes two arguments:
+- `uid` of the document you want to set
+- `data` object you want to set it to
+
+### Example
 
 ```jsx
-// Initialize the hook with parameters
-// first is operation, which is a type of change you want to do on the Firestore
-// second is a name of the collection in Firestore you want to change
-// then there is an object for all of the options - always consult docs if you want to use them
-// as they change for different operations, though if you don't pass them they all have defaults
+import React, { useState } from 'react';
+import { useSet } from 'firebase-hooks-react';
 
-// pro tip - its helpful to read the hook like this:
-// const setCity = useWriteFS('set', {/* document in */} 'city', {
+const App = () => {
+	// we need to point the hook to the collection with the parameter string
+	const [loading, error, setName] = useSet('names', {/* optional merge boolean */} true);
+	const [name, setNameField] = useState('')
 
-const setCity = useWriteFS('set', 'city', {
-	merge: true, // default false
-});
+  const onSubmit = (e) => {
+		e.preventDefault();
+		// then we can use it wherever we want, like in this submit function
+		// that sends an object to the database with key of name and value of name (thats in the state)
+    setName('testing', { name });
+  };
 
-// Example in a submit action:
-// Function needs to be async as the setCity returns a promise
-handleSubmit = async () => {
-	// we need a try catch block in this async function as writing to db is done over the network,
-	// and stuff can always go wrong
-	try {
-		// need to await the operation to resolve successfully
-		// function doesn't return anything so no need to capture the outcome
-		await setCity({data: 'that', you: 'want', to: 'save'}, 'uidOfTheDocYouWantToChangeOrCreate')
-		// after its done you can call any other function like redirect to other path:
-		props.history.push('/')
-	} catch (e) {
-		// handle the error. Might have been caused by collection not existing for example
-	}
-}
+  return (
+    <div className='App'>
+      <form onSubmit={onSubmit}>
+				<input type='text' value={name} onChange={e => setNameField(e.target.value)} />
+        {/* useful thing is using loading boolean for disabling the button */}
+				<input type='submit' value='Change your name' disabled={loading} />
+        {/* you should probably do some more error handling than this, but its quick and dirty and does the work here */}
+        {error && JSON.stringify(error)}
+      </form>
+    </div>
+  );
+};
+
+export default App;
 ```
 
-## Add
+## `useAdd`
+
+Use when you don't want to think about what id you want to give something, you just want to add a new doc to the collection. Only takes a `collection` string.
+
+The `addFunction` that the hook returns takes one argument:
+- `data` object containing the data you want to add.
+
+### Example
 
 ```jsx
-// same process as with set, so for details have a look above
-// same pro-tip as above - its useful to read it like this:
-// const setCity = useWriteFS('add', {/* document to */} 'city')
+import React, { useState } from 'react';
+import { useAdd } from 'firebase-hooks-react';
 
-// This time there are no options as we let firestore figure out the id
-const addCity = useWriteFS('add', 'city');
+const App = () => {
+	// we need to point the hook to the collection with the parameter string
+	const [loading, error, addName] = useAdd('names');
+	const [name, setName] = useState('')
 
-// Example in a submit action:
-// Function needs to be async as the addCity returns a promise
-handleSubmit = async () => {
-	try {
-		// need to await the operation to resolve successfully
-		// function doesn't return anything so no need to capture the outcome
-		await addCity({data: 'that', you: 'want', to: 'save'})
-		// after its done you can call any other function like redirect to other path:
-		props.history.push('/')
-	} catch (e) {
-		// handle the error. Might have been caused by collection not existing for example
-	}
-}
+  const onSubmit = (e) => {
+    e.preventDefault();
+		// then we can use it wherever we want
+    addName({ name });
+  };
+
+  return (
+    <div className='App'>
+      <form onSubmit={onSubmit}>
+        <input type='text' value={name} onChange={e => setName(e.target.value)} />
+        {/* useful thing is using loading boolean for disabling the button */}
+        <input type='submit' value='Add new name' disabled={loading} />
+        {error && JSON.stringify(error)}
+      </form>
+    </div>
+  );
+};
+
+export default App;
 ```
 
-## Update
+## `useUpdate`
+
+Useful if you have a document that you know the id of and you want to update one field in it. Pretty much the same as using the `useSet` hook with merge set to true. Takes only a `collection` string.
+
+The `updateFunction`, that the hook returns, takes two arguments:
+- `uid` of the document you want to update
+- `data` object with fields that you want to update in a document
 
 ```jsx
-// Very similar structure to Set function, the difference is only in the string that you have to pass,
-// and that there are no extra options to pass
-// a reading pro-tip again:
-// const setCity = useWriteFS('update', {/* document in */} 'city')
-const updateCity = useWriteFS('update', 'city');
+import React, { useState } from 'react';
+import { useUpdate } from 'firebase-hooks-react';
 
-// Example in a submit action:
-// Function needs to be async as the updateCity returns a promise
-handleSubmit = async () => {
-	try {
-		// we need to know what document you want to update - by passing its id as first arg
-		// second parameter is an object of existing values you want to update
-		// consult with these docs on what you can actually do with that as there are cool things like increase by one
-		// https://firebase.google.com/docs/firestore/manage-data/add-data#update-data
-		await updateCity({data: 'that', you: 'want', to: 'save'}, 'uidOfTheDocYouWantToChangeOrCreate')
-		// after its done you can call any other function like redirect to other path:
-		props.history.push('/')
-	} catch (e) {
-		// handle the error. Might have been caused by collection not existing for example
-	}
-}
+const App = () => {
+	// we need to point the hook to the collection with the parameter string
+	const [loading, error, updateName] = useUpdate('names');
+	const [name, setName] = useState('')
+
+  const onSubmit = (e) => {
+		e.preventDefault();
+		// then we can use it wherever we want
+    updateName('testing', { name });
+  };
+
+  return (
+    <div className='App'>
+      <form onSubmit={onSubmit}>
+        <input type='text' value={name} onChange={e => setName(e.target.value)} />
+        {/* useful thing is using loading boolean for disabling the button */}
+        <input type='submit' value='Change your name' disabled={loading} />
+        {error && JSON.stringify(error)}
+      </form>
+    </div>
+  );
+};
+
+export default App;
 ```
 
-## Delete
+## `useDelete`
+
+Simply deletes a document in the firebase, based on the id that you give it. Takes a `collection` string as always.
+
+The `deleteFunction`, that the hook returns, takes one argument:
+- `uid` of the document you want to delete
 
 ```jsx
-// You might get the theme that these hooks are meant to look very similar and no changes here
-// one thing you have to keep in mind that deleting a document doesnt delete its children,
-// you can read about it here: https://firebase.google.com/docs/firestore/manage-data/delete-data#collections
-const deleteCity = useWriteFS('delete', {/*document in*/} 'city');
+import React from 'react';
+import { useDelete } from 'firebase-hooks-react';
 
-// Example in a submit action:
-// Function needs to be async as the updateCity returns a promise
-handleSubmit = async () => {
-	try {
-		// we need to know what document you want to delete - we do that by passing its id as first arg
-		// It doesnt return anything
-		await deleteCity('uidOfTheDocYouWantToChangeOrCreate')
-		// after its done you can call any other function like redirect to other path:
-		props.history.push('/')
-	} catch (e) {
-		// handle the error. Might have been caused by collection not existing for example
-	}
-}
+const App = () => {
+	// we need to point the hook to the collection with the parameter string
+	const [loading, error, deleteName] = useDelete('names');
+
+  const handleClick = () => {
+		// then we can use it wherever we want
+    deleteName('testing');
+  };
+
+  return (
+    <button value='Delete some name' onClick={handleClick} />
+  );
+};
+
+export default App;
 ```
 
-## Delete a field
+## `useDeleteFields`
+
+Only deletes specified fields from a chosen document
+
+The `deleteFieldsFunction`, that the hook returns, takes two arguments:
+- `uid` of the document you want to update
+- `fields` which is an array of strings of fields that you want to delete in a document
 
 ```jsx
-// probably the least useful but still here
-// similar to delete action, just accepts an extra argument which is an array of fields to delete
-const deleteFieldInCity = useWriteFS('deleteField', {/*in a document in the*/} 'city');
+import React from 'react';
+import { useDeleteFields } from 'firebase-hooks-react';
 
-// Example in a submit action:
-// Function needs to be async as the deleteFieldInCity returns a promise
-handleSubmit = async () => {
-	try {
-		// we need to know in what document you want to delete passed fields - we do that by passing its id as first arg
-		// then we need to know what fields you want to delete, pass them as an array of strings
-		// It doesn't return anything
-		await setCity('uidOfTheDocYouWantToChangeOrCreate', ['capital', 'population'])
-		// after its done you can call any other function like redirect to other path:
-		props.history.push('/')
-	} catch (e) {
-		// handle the error. Might have been caused by collection not existing for example
-	}
-}
+const App = () => {
+	// we need to point the hook to the collection with the parameter string
+	const [loading, error, deleteFieldsInName] = useDelete('names');
 
+  const handleClick = () => {
+		// then we can use it wherever we want
+    deleteFieldsInName('testing', ['name']);
+  };
+
+  return (
+    <button value='Delete some fields in name' onClick={handleClick} />
+  );
+};
+
+export default App;
 ```

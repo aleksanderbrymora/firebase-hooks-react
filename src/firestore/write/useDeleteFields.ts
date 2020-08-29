@@ -27,6 +27,7 @@ export const useDeleteFields = (collection: string): UseDeleteFieldType => {
    */
   const deleteFieldsFunction = (doc: string, fields: string[]): void => {
     setLoading(true);
+    setError(null);
     if (!doc) {
       setError(new Error('You need to pass an uid of the document you want to delete a field in'));
       setLoading(false);
