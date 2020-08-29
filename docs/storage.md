@@ -22,7 +22,10 @@ return [loading, error, {
   paginate, // details here: https://firebase.google.com/docs/storage/web/list-files#paginate_list_results; takes a max results number and returns items, prefixes and next() function to re-trigger search for the next items
   listAll, // takes in an object with: `recurse`: boolean, `prefixes`: boolean, `items` boolean
 } = useStorage(
-  'path', // can be either a path, url (gs://bucket...), or a ref (https://firebasestorage...)
+  // these are fully optional, you can easily omit them
+  // prefix is useful, for example, when you want to nest your queries behind a user id, so you don't have to type it out all the time, pass undefined if you just want to use suffix
+  // suffix is useful if you just want to fetch one filetype and you just cant be bothered to type it out by hand. Not too useful but hey, it's here
+  {prefix: '__user/files', suffix: '.jpg'} // note that when passing suffix like that you cant pass your own file extensions when writing out the path later
 )
 ```
 
@@ -50,7 +53,7 @@ return [loading, error, {
     capture: 'accept' | 'user' | 'environment',
     multiple: true | false,
     metadata: {
-      // all of the metadata that the user might want to attach to the file, here are docs in FB https://firebase.google.com/docs/storage/web/upload-files#add_file_metadata
+      // all of the metadata that the user might want to attach to the file, here are docs https://firebase.google.com/docs/storage/web/upload-files#add_file_metadata
     },
   }
   )
