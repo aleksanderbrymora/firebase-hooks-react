@@ -3,32 +3,28 @@ import { useFire } from '../../context';
 import { timestamp } from '../../utils/addTimestamp';
 import { isEmpty } from '../../utils/isEmpty';
 
-type UseSetType = [boolean, null | Error, SetFunction]
-type SetFunction = (doc: string, data: object) => void
+type UseUpdateType = [boolean, null | Error, UpdateFunction]
+type UpdateFunction = (doc: string, data: object) => void
 
 /**
- * Hook for setting the data. Takes an object with these params:
+ * Hook for updating the data
  * @param collection - string pointing to a collection
- * @param merge - optional boolean specifying if set should overwrite or merge, defaults to false
  * @returns an array of:
  * - `loading` boolean,
  * - `error` null or Error,
- * - `setFunction` used to set items in firestore
+ * - `updateFunction` used to set items in firestore
  */
-export const useSet = (
-  collection: string,
-  merge: boolean = false,
-): UseSetType => {
+export const useUpdate = (collection: string): UseUpdateType => {
   const { firestore } = useFire();
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<null | Error>(null);
 
   /**
-   * Function used to set a document in the firestore
+   * Function used to update a document in the firestore
+   * @param data - an object that will be update in the firestore
    * @param doc - string pointing to a document to edit
-   * @param data - an object that will be set in the firestore
    */
-  const setFunction = (doc: string, data: object): void => {
+  const updateFunction = (doc: string, data: object): void => {
     setLoading(true);
     if (isEmpty(data)) {
       setError(new Error('You need to specify the data you want to set'));
@@ -39,13 +35,13 @@ export const useSet = (
     } else {
       const timestampedData = {
         ...data,
-        createdAt: timestamp(),
+        updatedAt: timestamp(),
       };
 
       (async () => {
         const ref = firestore!.collection(collection).doc(doc);
         try {
-          await ref.set(timestampedData, { merge });
+          await ref.update(timestampedData);
           setLoading(false);
         } catch (e) {
           setError(e);
@@ -55,5 +51,5 @@ export const useSet = (
     }
   };
 
-  return [loading, error, setFunction];
+  return [loading, error, updateFunction];
 };
