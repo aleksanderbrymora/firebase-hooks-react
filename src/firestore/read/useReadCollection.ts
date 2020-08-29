@@ -2,6 +2,10 @@ import { useState, useEffect } from 'react';
 import { CollectionData } from '../../types/firestore';
 import { useFire } from '../../context';
 
+/**
+ * Hook used for reading the whole collection in the firestore database
+ * @param {string} path - is a string pointing to a collection in the firestore
+ */
 export const useReadCollection = (path: string): CollectionData => {
   const [data, setData] = useState<CollectionData>([true, null, []]);
   const { firestore } = useFire();

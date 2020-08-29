@@ -9,6 +9,14 @@ import {
 } from '../types';
 import { ProviderType } from './authProviders';
 
+/**
+ * Creates a signup hook with provider, like Google
+ *
+ * @param {ProviderType} provider - a type of provider (like Google) for the authorization
+ * @param {ProviderOptions} providerOptions - optional options for things like scoping
+ * the data available after signup
+ * @param callback - optional callback function
+ */
 export const useProviderPopup = (
   provider: ProviderType,
   providerOptions?: ProviderOptions,

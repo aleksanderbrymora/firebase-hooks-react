@@ -7,7 +7,7 @@ export const convertToWithUser = (path: string): string => {
   const { user } = useR();
   if (user && path.includes(FIRE_USER)) {
     const userRegex = new RegExp(FIRE_USER, 'g')!;
-    return path.replace(userRegex, user.uid); // todo add proper userID
+    return path.replace(userRegex, user.uid);
   }
   return path;
 };
