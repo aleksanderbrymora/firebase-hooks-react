@@ -1,6 +1,21 @@
 # Auth
 
-Here is an example of simple login with password
+## Todo - userData
+
+Attach an always present object of data to this hook thats initialized during the initialization of the whole thing in `index.js`.
+
+```js
+const Firebase = CreateFirebaseContext(
+	{ ...initData },
+	['auth', 'firestore', 'storage', 'database'],
+	{ // this is the object in question. Supports only simple one-level-deep object for simplicity sake - its not graphql sadly.
+		// this object only changes when there is a change in the authorized user, so queries containing `__user` wont be included for unauthorized user
+	  // Accepting PR's of course if that feature is needed
+		favs: ["__user"], // if one item passed then its a collection - returns array
+		favColor: ["__user", "favColor"] // if two passed that means that its a query for document - returns an object
+	}
+);
+```
 
 ## `useR`
 
