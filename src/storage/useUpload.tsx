@@ -1,74 +1,20 @@
 import { useState, useEffect } from 'react';
+import { useFire } from '../context/FirebaseContext';
+import { convertToWithUser } from '../utils/convertToWithUser';
+import {
+  UploadStatusInformation,
+  InputPropsType,
+  UseUploadOptionalProps,
+  StatusNumbers,
+  FormPropsType,
+  ReturnUseUploadType,
+  initialUploadObject,
+  messages,
+} from './useUploadTypes';
 
-interface UploadStatusInformation {
-  code: string
-  message: string
-  percentage: string
-  fraction: number
-  downloadUrl: null | string
-}
+const convertFileToName = (path: string, file: File): string => path.replace(/__file/g, file.name);
 
-interface InputHandlerType {
-  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void
-  value: string
-  type: string
-}
-
-interface FormHandlerType {
-  onSubmit: () => void
-}
-
-interface ButtonHandlerType {
-  onClick: () => void
-  disabled: boolean
-}
-
-interface UploadInterface {
-  status: UploadStatusInformation
-  inputHandler: InputHandlerType // to be added to the input field for upload functionality
-  formHandler: FormHandlerType // to be spread on the form to add submit action
-  buttonHandler: ButtonHandlerType // to be on the button instead of in the form
-  // same thing as in the button handler and formHandler just function on its own
-  uploadFunction: () => void
-  pause: () => void
-  resume: () => void
-  cancel: () => void
-}
-
-interface UseUploadOptionalProps {
-  accept: string
-  capture: 'accept' | 'user' | 'environment'
-  multiple: boolean
-  metadata: object
-}
-
-type ReturnUseUploadType = [boolean, null | Error, UploadInterface]
-
-const messages = [
-  ['initial', 'Add the file'],
-  ['input has file', 'Added file, submit it to start the upload'],
-  ['uploading', 'Please wait. Your file is uploading'],
-  ['fail', 'There has been an error. Please retry'],
-  ['done', 'The upload has finished'],
-  ['paused', 'Waiting to resume'],
-];
-
-enum StatusNumbers {
-  initial = 0,
-  hasFile,
-  uploading,
-  fail,
-  done,
-  paused
-}
-
-const initialUploadObject: UploadStatusInformation = {
-  code: 'initial',
-  fraction: 0,
-  message: 'Add the file',
-  percentage: '0%',
-  downloadUrl: null,
-};
+const trimPath = (path: string): string => path.trim().replace(/^\//g, '').replace(/\/$/g, '');
 
 const validateParams = (path: string, options?: UseUploadOptionalProps): void => {
   // Checking if path contains at least one letter dot and one letter
@@ -98,36 +44,156 @@ const validateParams = (path: string, options?: UseUploadOptionalProps): void =>
   }
 };
 
+const createInputProps = (
+  fileSetter: (value: React.SetStateAction<FileList | null>) => void,
+  statusSetter: (value: React.SetStateAction<number>) => void,
+  files: null | FileList,
+  options?: UseUploadOptionalProps,
+): InputPropsType => {
+  const inputHandler: InputPropsType = {
+    onChange: (e: React.ChangeEvent<HTMLInputElement>) => {
+      statusSetter(StatusNumbers.hasFile);
+      fileSetter(e.target.files);
+    },
+    value: files,
+    type: 'file',
+  };
+  if (options?.accept) inputHandler.accept = options.accept.join(',');
+  if (options?.multiple) inputHandler.multiple = options.multiple;
+  if (options?.capture) inputHandler.capture = options.capture;
+
+  return inputHandler;
+};
+
+const uploadFiles = (
+  files: FileList | null,
+  path: string,
+) => {
+  const { storage } = useFire();
+
+  const storageRef = storage!.ref(path);
+
+  if (files) {
+    const file = files[0];
+    const fileRef = storageRef.child(convertToWithUser(convertFileToName(path, file)));
+    // returning a function that will initiate the upload, but not uploading yet
+    return () => fileRef.put(file);
+  }
+
+  throw new Error("You haven't passed in any files");
+};
+
+const createFormProps = (
+  statusSetter: (value: React.SetStateAction<number>) => void,
+  loadingSetter: (value: React.SetStateAction<boolean>) => void,
+  uploadFunction: () => firebase.storage.UploadTask,
+  setUploadTask: (value: React.SetStateAction<firebase.storage.UploadTask | null>) => void,
+): FormPropsType => ({
+  onSubmit: () => {
+    loadingSetter(true);
+    statusSetter(StatusNumbers.uploading);
+    setUploadTask(uploadFunction());
+  },
+});
+
 export const useUpload = (path: string, options?: UseUploadOptionalProps): ReturnUseUploadType => {
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<null | Error>(null);
+
+  // Status messages
   const [statusMessageNumber, setStatusMessageNumber] = useState(0);
   const [uploadStatus, setUploadStatus] = useState<UploadStatusInformation>(initialUploadObject);
+
+  // Submit button
+  const [submitButtonProps, setSubmitButtonProps] = useState({
+    value: 'Waiting for a file',
+    disabled: true,
+    type: 'submit',
+  });
+
+  // Files
+  const [files, setFiles] = useState<null | FileList>(null);
+
+  // Upload task related stuff
+  const [uploadTask, setUploadTask] = useState<null | firebase.storage.UploadTask>(null);
+  const [uploadFunctions, setUploadFunctions] = useState<{
+    cancel: null |(() => boolean),
+    pause: null | (() => boolean),
+    resume: null | (() => boolean),
+      }>({
+        cancel: null,
+        pause: null,
+        resume: null,
+      });
 
   // used for easier message setting
   useEffect(() => {
     const [code, message] = messages[statusMessageNumber];
-    setUploadStatus((u) => ({
-      ...u,
-      code,
-      message,
-    }));
+    setUploadStatus((u) => ({ ...u, code, message }));
   }, [statusMessageNumber]);
 
+  // used to enable submit button when files are selected
+  useEffect(() => {
+    if (files && files.length > 1) {
+      setSubmitButtonProps({
+        value: 'Upload your file',
+        disabled: false,
+        type: 'submit',
+      });
+    } else {
+      setSubmitButtonProps({
+        value: 'Waiting for a file',
+        disabled: true,
+        type: 'submit',
+      });
+    }
+  }, [files]);
+
+  // updating the stage depending on the files
+  useEffect(() => { // todo think this through
+    if (files && files.length > 0) {
+      setStatusMessageNumber(StatusNumbers.hasFile);
+    }
+  }, [files]);
+
+  // Updating upload functions based on the creation of upload task
+  useEffect(() => {
+    if (uploadTask) {
+      setUploadFunctions({
+        cancel: uploadTask.cancel,
+        pause: uploadTask.pause,
+        resume: uploadTask.resume,
+      });
+    } else {
+      setUploadFunctions({
+        cancel: null,
+        pause: null,
+        resume: null,
+      });
+    }
+  }, [uploadTask]);
+
   // Trimming path of extra slashes if present
-  const trimmedPath = path.trim().replace(/^\//g, '').replace(/\/$/g, '');
+  const trimmedPath = trimPath(path);
 
   // Error handling
   validateParams(trimmedPath, options);
 
-  const inputHandler: InputHandlerType = {
-    onChange: () => {
-      setLoading(true);
-      setStatusMessageNumber(StatusNumbers.hasFile);
-    },
-  };
+  const inputProps = createInputProps(setFiles, setStatusMessageNumber, files, options);
+
+  const uploadTaskFunction = uploadFiles(files, trimmedPath);
+
+  const formProps = createFormProps(
+    setStatusMessageNumber,
+    setLoading,
+    uploadTaskFunction,
+    setUploadTask,
+  );
 
   return [loading, error, {
     status: uploadStatus,
+    inputProps,
+    formProps,
+    ...uploadFunctions, // cancel, resume, pause
   }];
 };

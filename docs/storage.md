@@ -43,11 +43,10 @@ return [loading, error, {
   resume, // function to resume the paused upload
   cancel, // function to cancel the ongoing upload
 }] = useUpload(
-  'path/image.png' // must be a full path to the file, can use these: `__user` and `__file` for things like `__user/__file`. These will be switched out, accordingly, for id of the user and full filename with extension. Will error out without authorized user
+  'path/image.png' // must be a full path to the file, can use these: `__user` and `__file` for things like `__user/__file`. These will be switched out, accordingly, for id of the user and full filename with extension. Will error out without authorized user.
   { // all of these are optional
     accept: ['.jpg', 'image/*'], // and all the other types - more info [here](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/file#Unique_file_type_specifiers)
     capture: 'accept' | 'user' | 'environment',
-    multiple: true | false,
     metadata: {
       // all of the metadata that the user might want to attach to the file, here are docs https://firebase.google.com/docs/storage/web/upload-files#add_file_metadata
     },

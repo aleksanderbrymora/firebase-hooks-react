@@ -5,6 +5,11 @@ export const FIRE_USER = '__user';
 
 export const convertToWithUser = (path: string): string => {
   const { user } = useR();
+
+  if (!user && path.includes(FIRE_USER)) {
+    throw new Error('You need to be authorised to access this route.');
+  }
+
   if (user && path.includes(FIRE_USER)) {
     const userRegex = new RegExp(FIRE_USER, 'g')!;
     return path.replace(userRegex, user.uid);

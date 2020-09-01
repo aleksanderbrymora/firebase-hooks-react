@@ -25,6 +25,7 @@ module.exports = {
     'no-unused-vars': 'off',
     '@typescript-eslint/no-unused-vars': ['error'],
     'import/no-unresolved': 0,
+    'no-plusplus': 0,
   },
   settings: {
     'import/resolver': {
