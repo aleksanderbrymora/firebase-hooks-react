@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import firebase from 'firebase/app';
 import { useFire } from '../context/FirebaseContext';
 import { convertToWithUser } from '../utils/convertToWithUser';
 import {
@@ -68,6 +69,7 @@ const createInputProps = (
 const uploadFiles = (
   files: FileList | null,
   path: string,
+  metadata?: object,
 ) => {
   const { storage } = useFire();
 
@@ -77,7 +79,7 @@ const uploadFiles = (
     const file = files[0];
     const fileRef = storageRef.child(convertToWithUser(convertFileToName(path, file)));
     // returning a function that will initiate the upload, but not uploading yet
-    return () => fileRef.put(file);
+    return () => fileRef.put(file, metadata);
   }
 
   throw new Error("You haven't passed in any files");
@@ -156,6 +158,39 @@ export const useUpload = (path: string, options?: UseUploadOptionalProps): Retur
     }
   }, [files]);
 
+  // adding progress listener and upload error handling
+  useEffect(() => {
+    if (uploadTask) {
+      uploadTask.on('state_changed', (snapshot) => {
+        setUploadStatus((u) => ({
+          ...u,
+          fraction: snapshot.bytesTransferred / snapshot.totalBytes,
+          percentage: `${(snapshot.bytesTransferred / snapshot.totalBytes) * 100}%`,
+        }));
+        switch (snapshot.state) {
+          case firebase.storage.TaskState.PAUSED:
+            setStatusMessageNumber(StatusNumbers.paused);
+            break;
+          case firebase.storage.TaskState.RUNNING:
+            setStatusMessageNumber(StatusNumbers.uploading);
+            break;
+          case firebase.storage.TaskState.CANCELED:
+            setStatusMessageNumber(StatusNumbers.cancelled);
+            break;
+          case firebase.storage.TaskState.SUCCESS:
+            setStatusMessageNumber(StatusNumbers.done);
+            break;
+          default:
+            setStatusMessageNumber(StatusNumbers.fail);
+        }
+      },
+      (e) => setError(e),
+      () => uploadTask.snapshot.ref.getDownloadURL().then(
+        (dl) => setUploadStatus((u) => ({ ...u, downloadUrl: dl })),
+      ));
+    }
+  }, [uploadTask]);
+
   // Updating upload functions based on the creation of upload task
   useEffect(() => {
     if (uploadTask) {
@@ -181,7 +216,7 @@ export const useUpload = (path: string, options?: UseUploadOptionalProps): Retur
 
   const inputProps = createInputProps(setFiles, setStatusMessageNumber, files, options);
 
-  const uploadTaskFunction = uploadFiles(files, trimmedPath);
+  const uploadTaskFunction = uploadFiles(files, trimmedPath, options?.metadata);
 
   const formProps = createFormProps(
     setStatusMessageNumber,
@@ -194,6 +229,8 @@ export const useUpload = (path: string, options?: UseUploadOptionalProps): Retur
     status: uploadStatus,
     inputProps,
     formProps,
+    submitButtonProps,
+    uploadFunction: files && files?.length > 0 ? uploadFiles(files, trimmedPath) : null,
     ...uploadFunctions, // cancel, resume, pause
   }];
 };

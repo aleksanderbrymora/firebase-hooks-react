@@ -21,7 +21,7 @@ export interface FormPropsType {
 
 export interface SubmitButtonType {
   disabled: boolean
-  type: 'submit'
+  type: string
   value: string
 }
 
@@ -31,7 +31,7 @@ export interface UploadInterface {
   formProps: FormPropsType // to be spread on the form to add submit action
   submitButtonProps: SubmitButtonType // to be spread on the submit button in the form
   // same thing as in the button handler and formHandler just function on its own
-  uploadFunction: () => void
+  uploadFunction: null | (() => void)
   pause: null | (() => boolean)
   resume: null | (() => boolean)
   cancel: null | (() => boolean)
@@ -53,6 +53,7 @@ export const messages = [
   ['fail', 'There has been an error. Please retry'],
   ['done', 'The upload has finished'],
   ['paused', 'Waiting to resume'],
+  ['cancelled', 'You cancelled the upload. You can upload another file'],
 ];
 
 export enum StatusNumbers {
@@ -61,7 +62,8 @@ export enum StatusNumbers {
   uploading,
   fail,
   done,
-  paused
+  paused,
+  cancelled
 }
 
 export const initialUploadObject: UploadStatusInformation = {
