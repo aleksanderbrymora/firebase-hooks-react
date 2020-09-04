@@ -10,7 +10,7 @@ import { SyntheticEvent } from 'react';
 import { useSignout } from './auth-types/useSignout';
 import { useEmailPasswordConfirm } from './auth-types/useEmailPasswordConfirm';
 import { useProviderPopup } from './auth-types/useProviderPopup';
-import { googleProvider, facebookProvider } from './auth-types/authProviders';
+import { googleProvider, facebookProvider, twitterProvider } from './auth-types/authProviders';
 
 type AuthType =
 	| 'emailPassword'
@@ -50,6 +50,8 @@ export const useAuth = (
 			return useProviderPopup(googleProvider, callback);
 		case 'facebook':
 			return useProviderPopup(facebookProvider, callback);
+		case 'twitter':
+			return useProviderPopup(twitterProvider, callback);
 		default:
 			// handling wrong type of auth action
 			throw new Error('No auth method with of type');
