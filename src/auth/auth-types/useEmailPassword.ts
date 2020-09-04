@@ -36,6 +36,7 @@ export const useEmailPassword = (callback?: () => void) => {
       setLoading(false);
       if (callback) callback();
     } catch (err) {
+      setLoading(false);
       setError(err);
     }
   };
