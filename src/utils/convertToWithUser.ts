@@ -1,10 +1,27 @@
-export const FIRE_USER = '__FIRE_USER';
+import { QueryTypes } from '../types/firestore/params';
+import { useR } from '../auth/useR';
+
+export const FIRE_USER = '__user';
 
 export const convertToWithUser = (path: string): string => {
-	if (path.includes(FIRE_USER)) {
-		const userRegex = new RegExp(FIRE_USER, 'g')!;
-		return path.replace(userRegex, 'someID'); // todo add propper userID
-	} else {
-		return path;
-	}
+  const { user } = useR();
+
+  if (!user && path.includes(FIRE_USER)) {
+    throw new Error('You need to be authorised to access this route.');
+  }
+
+  if (user && path.includes(FIRE_USER)) {
+    const userRegex = new RegExp(FIRE_USER, 'g')!;
+    return path.replace(userRegex, user.uid);
+  }
+  return path;
+};
+
+export const handleUser = (query: QueryTypes): QueryTypes => {
+  if (typeof query === 'string') return convertToWithUser(query);
+
+  return {
+    ...query,
+    collection: convertToWithUser(query.collection),
+  };
 };
